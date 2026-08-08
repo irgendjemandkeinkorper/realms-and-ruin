@@ -63,6 +63,36 @@ const READY_ART = new Set([
   'tarot/archetypes/clockwork-tinkerer-guttered-vault-woodcut-v1.png'
 ]);
 
+/* The live Kaz-Dahrum roster is generated into the project with stable
+   extensionless keys for single-face cards and paired stems for two-face
+   cards. Keep this list explicit so the gallery never probes unrelated
+   archival Bleakwood Vale images that happen to share a folder. */
+for (const style of ['painterly','tarot']) {
+  for (const id of ['black-gate','lost-cartographers','broken-ward','rival-expedition','clockwork-heart','below-the-below']) {
+    READY_ART.add(`${style}/hooks/${id}`);
+  }
+  for (const slug of [
+    'a-gear-that-turns-against-the-clock','a-star-metal-shard','a-lantern-with-two-flames',
+    'a-chain-still-attached-to-the-wall','a-rivals-broken-signet','sand-running-upward',
+    'a-helm-with-no-face-inside','a-map-of-rooms-that-move','a-ward-written-in-bloodless-ink',
+    'a-coin-from-no-known-kingdom','a-second-shadow','a-spell-with-no-caster',
+    'a-crown-of-sleeping-brass','a-name-beneath-your-name','a-field-dressing-already-used',
+    'a-door-that-opens-into-the-same-room','a-falling-ember-under-stone','a-scale-with-one-side-missing'
+  ]) READY_ART.add(`${style}/omens/${slug}`);
+}
+for (const slug of ['disgraced-alienist','opium-addled-poet','veiled-widow','defrocked-priest','resurrection-man','inspector-yard','mediums-apprentice','heir-in-exile','mudlark','undertakers-daughter','blind-fortune-teller']) {
+  READY_ART.add(`painterly/archetypes/${slug}-candlelit-v1.png`);
+  READY_ART.add(`painterly/archetypes/${slug}-guttered-v1.png`);
+}
+for (const slug of ['oathbound-shield','rift-scholar','delver-rogue','ashen-acolyte','beastwarden','clockwork-tinkerer','gravebound-knight','blood-ledger','feral-hexblade','plague-alchemist','masked-usurper','void-shepherd']) {
+  READY_ART.add(`painterly/archetypes/${slug}-candlelit-v1.png`);
+  READY_ART.add(`painterly/archetypes/${slug}-guttered-v1.png`);
+}
+for (const slug of ['star-metal-seal','living-silver-map','black-crystal-keystone','brass-command-crown','clockwork-heart','nameless-fragment']) {
+  READY_ART.add(`tarot/victims/${slug}-mourning-v1.png`);
+  READY_ART.add(`tarot/victims/${slug}-die-nacht-v1.png`);
+}
+
 export function artAssetAvailable(style, category, key){
   return READY_ART.has(`${normalizeArtStyle(style)}/${category}/${key}`);
 }
