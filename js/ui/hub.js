@@ -1,0 +1,236 @@
+import { $, esc, shuffle, toneBadge, ACT_NAMES, actTrackHTML } from '../engine/utils.js';
+import { TONES, SCENES } from '../data/index.js';
+import { State } from '../engine/state.js';
+import { show, renderTopbar } from './screens.js';
+import { archCard, omenCard, playerPanel, journalEntrySummaryHTML } from './cards.js';
+import { actToneCounts } from '../engine/rules.js';
+import { renderScenePlay } from './scene.js';
+import { viewChronicle } from './renderChronicle.js';
+
+/* ---------------- milestone rail ----------------
+   A compact, newest-first digest of the story's key beats — act
+   boundaries, archetypes turning, and Hidden Sins coming to light —
+   so the table can glance back without leaving the hub. "The Record"
+   (renderChronicle.js) remains the full detailed account; this is a
+   summary derived from the same G.journal, not a second source of truth. */
+function computeMilestones(G){
+  const ms = [];
+  let lastAct = 0;
+  const openAct = a => { for(let n=lastAct+1;n<=a;n++) ms.push({icon:'●', text:`${ACT_NAMES[n]} began`}); lastAct = a; };
+  G.journal.forEach(e=>{
+    if(e.struck) return; // stricken things never were
+    if(e.act > lastAct) openAct(e.act);
+    if(e.type==='close') ms.push({icon:'●', text:`${ACT_NAMES[e.act]} closed — ${e.cardTitle}`});
+    else if(e.type==='secret') ms.push({icon:'✦', text:`A Hidden Sin revealed — ${e.playerName}`});
+    else if(e.type==='scene') (e.flips||[]).forEach(f=>ms.push({icon:'◆', text:f}));
+  });
+  if(G.act>=1 && G.act<=3 && G.act>lastAct) openAct(G.act);
+  return ms;
+}
+function milestoneRailHTML(G){
+  const all = computeMilestones(G);
+  if(!all.length) return '';
+  const shown = all.slice().reverse().slice(0,8);
+  return `<div class="panel tight ms-rail">
+    <h3 style="color:var(--gold)">The Tale So Far</h3>
+    <div class="ms-list">
+      ${shown.map((m,i)=>`<div class="ms-row" style="animation-delay:${i*0.05}s" onclick="viewChronicle(true)"><span class="ms-icon">${m.icon}</span><span class="ms-text">${esc(m.text)}</span></div>`).join('')}
+    </div>
+    ${all.length>shown.length?`<p class="small muted" style="margin-top:6px;cursor:pointer" onclick="viewChronicle(true)">+${all.length-shown.length} earlier beat${all.length-shown.length===1?'':'s'} — open The Record</p>`:''}
+  </div>`;
+}
+
+function localTurnSeatHTML(G,p,i){
+  const noWayToLead = p.hand.length===0 && (p.omens.length===0 || G.sceneDeck.length===0);
+  const needsTrade = p.hand.length===0 && !noWayToLead;
+  const state = p.scenesLeft<=0 ? 'done' : noWayToLead ? 'blocked' : needsTrade ? 'trade' : 'ready';
+  const label = state==='done' ? 'Finished this act' : state==='blocked' ? 'No card to lead' : state==='trade' ? 'Trade first' : 'Ready to lead';
+  const readyLabel = p.readyRole==='lead' ? 'Ready to lead' : p.readyRole==='follow' ? 'Ready to follow' : p.readyRole==='watch' ? 'Ready to watch' : '';
+  return `<div class="turn-seat ${state}">
+    <div class="turn-seat-head"><strong>${esc(p.name)}</strong><span>${readyLabel?`<em class="ready-badge ready-badge-${p.readyRole}">${readyLabel}</em>`:label}</span></div>
+    <p>${p.scenesLeft} scene${p.scenesLeft===1?'':'s'} left to lead · ${p.hand.length} scene card${p.hand.length===1?'':'s'} · ${p.omens.length} held omen${p.omens.length===1?'':'s'}</p>
+    <div class="turn-seat-actions">
+      <button class="ghost ready-role ready-role-lead${p.readyRole==='lead'?' selected':''}" aria-pressed="${p.readyRole==='lead'}" onclick="toggleReady(${i},'lead')">${p.readyRole==='lead'?'✓ ':''}Ready to lead</button>
+      <button class="ghost ready-role ready-role-follow${p.readyRole==='follow'?' selected':''}" aria-pressed="${p.readyRole==='follow'}" onclick="toggleReady(${i},'follow')">${p.readyRole==='follow'?'✓ ':''}Ready to follow</button>
+      <button class="ghost ready-role ready-role-watch${p.readyRole==='watch'?' selected':''}" aria-pressed="${p.readyRole==='watch'}" onclick="toggleReady(${i},'watch')">${p.readyRole==='watch'?'✓ ':''}Ready to watch</button>
+      ${state==='ready'?`<button class="primary" onclick="startSceneFor(${i})">Begin a scene</button>`:''}
+      ${state==='blocked' && p.scenesLeft>0?`<button class="blood" onclick="forfeitScene(${i})">Forfeit scene</button>`:''}
+      <button class="ghost" onclick="openLocalHand(${i})">View ${esc(p.name)}’s cards</button>
+    </div>
+  </div>`;
+}
+export function toggleReady(pi,role){ const p=State.G.players[pi]; p.readyRole=p.readyRole===role?null:role; renderHub(); }
+
+/* ---------------- acts ---------------- */
+export function startAct(act){
+  const G = State.G;
+  G.act = act;
+  G.closeDone = false;
+  G.discardTones = [];
+  const np = G.players.length;
+  G.sceneDeck = shuffle(SCENES[act].filter(s=>!s.hook || s.hook===G.hook.id).map(s=>({...s})));
+  const handSize = np===1?5:3;
+  G.players.forEach(p=>{
+    p.hand = G.sceneDeck.splice(0, handSize);
+    p.scenesLeft = np===1?3 : np===2?2 : 1;
+  });
+  renderHub();
+  show('scr-hub');
+}
+
+export function renderHub(){
+  const G = State.G;
+  const close = G.actClose[G.act];
+  const remaining = G.players.reduce((s,p)=>s+p.scenesLeft,0);
+  $('scr-hub').innerHTML = `
+    <h2 class="center" style="margin-top:8px">${ACT_NAMES[G.act]}</h2>
+    <p class="center muted">${esc(G.hook.title)} · The Victim: ${esc(G.victim.name)}</p>
+    ${actTrackHTML(G.act)}
+    <div class="ornament">✦ ❦ ✦</div>
+
+    <div class="panel spotlight turn-board">
+      <div class="turn-board-head">
+        <div><span class="turn-kicker">Who acts now?</span><h3>Any ready storyteller may begin</h3></div>
+        <span class="pill">${remaining} scene${remaining===1?'':'s'} before the close</span>
+      </div>
+      <p class="turn-guidance">There is no fixed turn order. Whoever has the next idea chooses <strong>Begin a scene</strong>; everyone else may buy in once play starts.</p>
+      <div class="turn-seats">${G.players.map((p,i)=>localTurnSeatHTML(G,p,i)).join('')}</div>
+    </div>
+
+    ${milestoneRailHTML(G)}
+
+    ${G.journal.length ? `<h3 style="color:var(--gold)">Last Scene</h3>${journalEntrySummaryHTML(G.journal[G.journal.length-1], {compact:true})}` : ''}
+
+    <div class="panel tight">
+      <h3 style="color:var(--blood-bright)">The Act Close — foreseen</h3>
+      <p><span class="sc" style="color:#eddfba">${esc(close.title)}.</span> <span class="muted small">${esc(close.cond)}</span></p>
+      <p class="small" style="color:#cfc2a2">${esc(close.prompt)}</p>
+      <p class="small muted">${TONES.map(t=>`${toneBadge(t)} <span>${esc(close.elements[t])}</span>`).join('<br>')}</p>
+    </div>
+
+    <details class="disclose" open>
+      <summary>The Archetypes <span class="small muted">(${G.archetypes.length})</span></summary>
+      <div class="disclose-body">
+        <div class="pgrid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:8px">
+          ${G.archetypes.map(a=>archCard(a)).join('')}
+        </div>
+      </div>
+    </details>
+
+    <details class="disclose" open>
+      <summary>The Omen Row <span class="small muted">(${G.omenRow.length})</span></summary>
+      <div class="disclose-body">
+        <p class="small muted">Read them literally, metaphorically, or obliquely — as you see fit. They accrue meaning as they recur.</p>
+        <div class="cardgrid compact">${G.omenRow.map(o=>omenCard(o)).join('')}</div>
+      </div>
+    </details>
+
+    <details class="disclose" id="storyteller-hands">
+      <summary>Hands &amp; Hidden Sins <span class="small muted">${G.players.length} storytellers · Scene deck ${G.sceneDeck.length} · Omen deck ${G.omenDeck.length}</span></summary>
+      <div class="disclose-body">
+        <div class="pgrid" style="margin-top:8px">
+          ${G.players.map((p,i)=>playerPanel(p,i)).join('')}
+        </div>
+      </div>
+    </details>`;
+  renderTopbar();
+}
+
+export function openLocalHand(i){
+  const shelf = $('storyteller-hands');
+  const panel = $('player-panel-'+i);
+  if(!shelf || !panel) return;
+  shelf.open = true;
+  panel.classList.remove('hand-focus');
+  requestAnimationFrame(()=>{
+    panel.classList.add('hand-focus');
+    panel.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>panel.classList.remove('hand-focus'),1400);
+  });
+}
+
+export function tradeOmen(pi,oi){
+  const G = State.G;
+  const p = G.players[pi];
+  if(!G.sceneDeck.length) return;
+  const o = p.omens.splice(oi,1)[0];
+  G.omenDeck.unshift(o);
+  p.hand.push(G.sceneDeck.pop());
+  renderHub();
+}
+export function forfeitScene(pi){
+  const G = State.G;
+  const p = G.players[pi];
+  p.scenesLeft--;
+  G.journal.push({type:'note', act:G.act, text:`${p.name} had neither scene card nor omen to trade, and lost their scene. The Vale went un-narrated a while.`, struck:false});
+  afterSceneFlow();
+}
+
+/* ---------------- act close & flow ---------------- */
+export function afterSceneFlow(){
+  const G = State.G;
+  if(G.closeDone){ advanceAct(); return; }
+  const remaining = G.players.reduce((s,p)=>s+p.scenesLeft,0);
+  if(remaining<=0){ renderCloseIntro(); show('scr-close'); }
+  else { renderHub(); show('scr-hub'); }
+}
+export function renderCloseIntro(){
+  const G = State.G;
+  const close = G.actClose[G.act];
+  const counts = actToneCounts();
+  const max = Math.max(...TONES.map(t=>counts[t]));
+  const tied = TONES.filter(t=>counts[t]===max);
+  const elementHTML = tied.length===1
+    ? `<p><strong style="color:var(--blood-bright)">The act’s dominant tone is ${toneBadge(tied[0])}</strong> — the close must <span>${esc(close.elements[tied[0]])}</span></p>
+       <input type="hidden" id="close-el" value="${tied[0]}">`
+    : `<p><strong style="color:var(--blood-bright)">The tones stand tied.</strong> The storyteller who begins may choose:</p>` +
+      tied.map((t,i)=>`<p><label style="cursor:pointer"><input type="radio" name="close-el" value="${t}" style="width:auto" ${i===0?'checked':''}> ${toneBadge(t)} <span class="small">${esc(close.elements[t])}</span></label></p>`).join('');
+  $('scr-close').innerHTML = `
+    <h2 class="center" style="color:var(--blood-bright)">${ACT_NAMES[G.act]} draws to a close</h2>
+    ${actTrackHTML(G.act)}
+    <div class="ornament">✦</div>
+    <div style="max-width:720px;margin:0 auto">
+      <div class="card">
+        <div class="c-kicker">Act Close</div>
+        <div class="c-title" style="font-size:1.4rem">${esc(close.title)}</div>
+        <div class="c-prompt">${esc(close.prompt)}</div>
+      </div>
+      <div class="panel spotlight">
+        <p class="small" style="color:var(--gold)">${esc(close.cond)}</p>
+        <p class="small muted">The tally of tones this act — from every card played and every archetype’s face — stands at:
+        ${TONES.map(t=>`<span class="tone count ${t}">${counts[t]}</span>`).join(' ')}</p>
+        ${elementHTML}
+        <label class="fld">Who begins the close?</label>
+        <select id="close-starter">${G.players.map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('')}</select>
+        <label class="fld">Which archetype leads it?</label>
+        <select id="close-arch">${G.archetypes.map((a,i)=>`<option value="${i}">${esc(a.name||a.role)} — ${esc(a.role)}</option>`).join('')}</select>
+        <label class="fld">What the camera sees as the close opens</label>
+        <textarea id="close-opening" placeholder="The camera rises above the Vale…"></textarea>
+        <div class="btnrow">
+          <button class="primary" onclick="beginClose()">Play the Act Close</button>
+        </div>
+      </div>
+    </div>`;
+}
+export function beginClose(){
+  const G = State.G;
+  const close = G.actClose[G.act];
+  let el;
+  const hidden = $('close-el');
+  if(hidden && hidden.type==='hidden') el = hidden.value;
+  else el = (document.querySelector('input[name="close-el"]:checked')||{}).value || TONES[0];
+  G.current = {
+    type:'close', starter:+$('close-starter').value, archIdx:+$('close-arch').value,
+    card:{title:close.title, prompt:close.prompt, tone:null},
+    element: close.elements[el],
+    opening:($('close-opening').value||'').trim(),
+    contributions:[], happened:'', adding:null, phase:'play'
+  };
+  renderScenePlay(0);
+  show('scr-scene');
+}
+export function advanceAct(){
+  const G = State.G;
+  if(G.act>=3){ G.act=4; viewChronicle(false); }
+  else startAct(G.act+1);
+}

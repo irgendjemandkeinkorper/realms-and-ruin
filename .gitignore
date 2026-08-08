@@ -1,7 +1,7 @@
+.claude/settings.local.json
+*:Zone.Identifier
 .DS_Store
-Thumbs.db
-*.swp
-*.tmp
-dist/
-build/
-node_modules/
+.env
+.venv/
+__pycache__/
+generate.log

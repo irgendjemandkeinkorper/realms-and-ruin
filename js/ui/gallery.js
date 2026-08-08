@@ -1,0 +1,156 @@
+import { $, esc, slugify } from '../engine/utils.js';
+import { CARD_ARCHETYPES, CARD_VICTIMS, HOOKS, OMENS, pairedCardStem } from '../data/index.js';
+import { openOverlay } from './screens.js';
+import { State } from '../engine/state.js';
+import { ART_STYLES, currentArtStyle } from './art.js';
+
+/* The card-art Gallery is available from the title screen and mid-game.
+   Its cards come from the static data tables; State.G is consulted only
+   to keep an active tale on the art style chosen when it was created.
+   Image files remain optional: see art/IMAGE_PROMPTS.md for the exact path
+   each tile expects. Missing files reveal a plain text fallback rather
+   than a broken image, so neither the Gallery nor play depends on art. */
+let gState = { style:'painterly', cat:'archetypes', detail:null };
+
+function archetypeTiles(style){
+  return pairedTiles(style,'archetypes',CARD_ARCHETYPES);
+}
+function hookTiles(style){
+  return HOOKS.map(h=>({cat:'hooks', key:h.id, title:h.title, sub:'The Incident', flavor:h.epigraph, path:`art/images/${style}/hooks/${h.id}`}));
+}
+function omenTiles(style){
+  return OMENS.map(o=>({cat:'omens', key:slugify(o.title), title:o.title, sub:o.glyph, flavor:o.line, path:`art/images/${style}/omens/${slugify(o.title)}`}));
+}
+function victimTiles(style){
+  return pairedTiles(style,'victims',CARD_VICTIMS);
+}
+function pairedTiles(style, category, cards){
+  return cards.map(item=>{
+    const [front,back] = item.faces;
+    return {cat:category, key:item.slug, title:item.title, sub:front.label, backSub:back.label,
+      flavor:front.context, backFlavor:back.context, quote:front.quote, backQuote:back.quote,
+      path:`art/images/${style}/${category}/${pairedCardStem(style,item,0)}.png`,
+      backPath:`art/images/${style}/${category}/${pairedCardStem(style,item,1)}.png`, flippable:true};
+  });
+}
+const CATS = [
+  {id:'archetypes', label:'Archetypes', build:archetypeTiles},
+  {id:'hooks', label:'Hooks', build:hookTiles},
+  {id:'omens', label:'Omens', build:omenTiles},
+  {id:'victims', label:'Victims', build:victimTiles}
+];
+
+/* Try a handful of extensions in turn before giving up and revealing the
+   text fallback underneath — the naming doc promises .jpg, but nothing
+   stops someone from exporting .png/.webp instead. */
+const EXTS = ['jpg','jpeg','png','webp'];
+function imgWithFallback(path, alt){
+  if(/\.(?:jpe?g|png|webp)$/i.test(path)){
+    return `<img loading="lazy" src="${path}" data-base="${path}" data-exts="" onerror="galleryImgError(this)" alt="${esc(alt)}">`;
+  }
+  const rest = EXTS.slice(1).join(',');
+  return `<img loading="lazy" src="${path}.${EXTS[0]}" data-base="${path}" data-exts="${rest}" onerror="galleryImgError(this)" alt="${esc(alt)}">`;
+}
+export function galleryImgError(img){
+  const exts = (img.dataset.exts||'').split(',').filter(Boolean);
+  if(exts.length){
+    const next = exts.shift();
+    img.dataset.exts = exts.join(',');
+    img.src = img.dataset.base + '.' + next;
+  } else {
+    (img.closest('.gallery-face') || img.closest('.gtile-media, .gdetail-media'))?.classList.add('g-missing');
+    img.remove();
+  }
+}
+
+function fallbackHTML(t, sub=t.sub){
+  return `<div class="gtile-fallback"><span class="gf-title">${esc(t.title)}</span>${sub?`<span class="gf-sub">${esc(sub)}</span>`:''}</div>`;
+}
+function galleryMediaHTML(t, detail=false){
+  const cls = detail ? 'gdetail-media' : 'gtile-media';
+  if(!t.flippable) return `<div class="${cls}">${imgWithFallback(t.path,t.title)}${fallbackHTML(t)}</div>`;
+  return `<div class="${cls} gallery-flip">
+    <div class="gallery-flip-inner">
+      <div class="gallery-face gallery-front">${imgWithFallback(t.path,`${t.title}, ${t.sub}`)}${fallbackHTML(t,t.sub)}<span class="gallery-face-label">${esc(t.sub)}</span></div>
+      <div class="gallery-face gallery-back">${imgWithFallback(t.backPath,`${t.title}, ${t.backSub}`)}${fallbackHTML(t,t.backSub)}<span class="gallery-face-label">${esc(t.backSub)}</span></div>
+    </div>
+    <button class="gallery-flip-control" type="button" onclick="event.stopPropagation();flipGalleryCard(this)" onkeydown="event.stopPropagation()" data-front-label="${esc(t.sub)}" data-back-label="${esc(t.backSub)}" aria-label="View ${esc(t.backSub)}" aria-pressed="false">⟳ <span>${esc(t.backSub)}</span></button>
+  </div>`;
+}
+function tileHTML(t){
+  return `<div class="gtile" role="button" tabindex="0" aria-label="Open ${esc(t.title)} details" onclick="openGalleryDetail('${t.cat}','${t.key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openGalleryDetail('${t.cat}','${t.key}')}">
+    ${galleryMediaHTML(t)}
+    <div class="gtile-cap">${esc(t.title)}${t.sub?` <span class="muted small">— <span data-gallery-side-label>${esc(t.sub)}</span></span>`:''}</div>
+    ${t.flippable?gallerySideQuoteHTML(t):''}
+  </div>`;
+}
+
+function gallerySideQuoteHTML(t){
+  return `<q class="gallery-side-quote" data-gallery-side-quote data-front-quote="${esc(t.quote)}" data-back-quote="${esc(t.backQuote)}">${esc(t.quote)}</q>`;
+}
+
+export function flipGalleryCard(btn){
+  const card = btn.closest('.gallery-flip');
+  if(!card) return;
+  const flipped = card.classList.toggle('is-flipped');
+  const frontLabel = btn.dataset.frontLabel || 'Side I';
+  const backLabel = btn.dataset.backLabel || 'Side II';
+  btn.setAttribute('aria-label',`View ${flipped?frontLabel:backLabel}`);
+  btn.setAttribute('aria-pressed',String(flipped));
+  btn.innerHTML = `${flipped?'↶':'⟳'} <span>${flipped?frontLabel:backLabel}</span>`;
+  const container = card.closest('.gtile, .gdetail');
+  const label = container?.querySelector('[data-gallery-side-label]');
+  if(label) label.textContent = flipped ? backLabel : frontLabel;
+  const quote = container?.querySelector('[data-gallery-side-quote]');
+  if(quote) quote.textContent = flipped ? quote.dataset.backQuote : quote.dataset.frontQuote;
+  const flavor = container?.querySelector('[data-gallery-side-flavor]');
+  if(flavor) flavor.textContent = flipped ? flavor.dataset.backFlavor : flavor.dataset.frontFlavor;
+}
+
+export function showGallery(){
+  gState.detail = null;
+  if(State.G) gState.style = currentArtStyle(State.G);
+  renderGallery();
+  openOverlay();
+}
+function renderGallery(){
+  if(gState.detail){ $('overlay-content').innerHTML = detailHTML(); return; }
+  const active = CATS.find(c=>c.id===gState.cat);
+  const tiles = active.build(gState.style);
+  const lockedStyle = State.G ? ART_STYLES.find(s=>s.id===currentArtStyle(State.G)) : null;
+  $('overlay-content').innerHTML = `
+    <h2 style="color:var(--gold)">The Gallery</h2>
+    <p class="small muted">Card art for Kaz-Dahrum — something to look through while the others plot. Anything missing just shows a plain card; drop generated images into <code>art/images/</code> (see <code>art/IMAGE_PROMPTS.md</code> for the exact paths) and they'll appear here automatically.</p>
+    ${lockedStyle
+      ? `<div class="gallery-style-lock"><span class="sc">This tale’s style</span><strong>${esc(lockedStyle.label)}</strong><small>Locked when the table was opened.</small></div>`
+      : `<div class="btnrow" style="margin-top:12px">${ART_STYLES.map(style=>`<button class="${gState.style===style.id?'primary':'ghost'}" onclick="setGalleryStyle('${style.id}')">${style.label}</button>`).join('')}</div>`}
+    <div class="btnrow" style="margin-top:6px">
+      ${CATS.map(c=>`<button class="${c.id===gState.cat?'primary':'ghost'}" onclick="setGalleryCat('${c.id}')">${c.label}</button>`).join('')}
+    </div>
+    <div class="ggrid gcat-${gState.cat}" style="margin-top:16px">${tiles.map(tileHTML).join('')}</div>
+    <div class="btnrow" style="justify-content:center;margin-top:20px"><button class="primary" onclick="closeOverlay()">Back to the Vale</button></div>`;
+}
+export function setGalleryStyle(style){ if(State.G) return; gState.style = style; renderGallery(); }
+export function setGalleryCat(cat){ gState.cat = cat; renderGallery(); }
+export function openGalleryDetail(cat, key){
+  const c = CATS.find(x=>x.id===cat);
+  const t = c && c.build(gState.style).find(x=>x.key===key);
+  if(!t) return;
+  gState.detail = t;
+  renderGallery();
+}
+export function closeGalleryDetail(){ gState.detail = null; renderGallery(); }
+function detailHTML(){
+  const t = gState.detail;
+  return `
+    <button class="ghost" onclick="closeGalleryDetail()">← Back to the Gallery</button>
+    <div class="gdetail">
+      ${galleryMediaHTML(t,true)}
+      <h3 style="color:var(--gold);margin-top:12px">${esc(t.title)}</h3>
+      ${t.sub?`<p class="small muted"><span data-gallery-side-label>${esc(t.sub)}</span></p>`:''}
+      ${t.flippable?gallerySideQuoteHTML(t):''}
+      ${t.flavor?`<p class="gallery-flavor" ${t.flippable?`data-gallery-side-flavor data-front-flavor="${esc(t.flavor)}" data-back-flavor="${esc(t.backFlavor)}"`:''}>${esc(t.flavor)}</p>`:''}
+      ${t.flippable?'<p class="small muted" style="margin-top:8px">Use the turn button on the card to compare its two faces.</p>':''}
+    </div>
+    <div class="btnrow" style="justify-content:center;margin-top:16px"><button class="primary" onclick="closeGalleryDetail()">← Back to the Gallery</button></div>`;
+}
