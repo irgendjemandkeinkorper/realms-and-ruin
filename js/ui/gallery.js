@@ -2,21 +2,21 @@ import { $, esc, slugify } from '../engine/utils.js';
 import { CARD_ARCHETYPES, CARD_VICTIMS, HOOKS, OMENS, pairedCardStem } from '../data/index.js';
 import { openOverlay } from './screens.js';
 import { State } from '../engine/state.js';
-import { ART_STYLES, currentArtStyle } from './art.js';
+import { ART_STYLES, artAssetAvailable, currentArtStyle } from './art.js';
 
 /* The card-art Gallery is available from the title screen and mid-game.
    Its cards come from the static data tables; State.G is consulted only
    to keep an active tale on the art style chosen when it was created.
-   Image files remain optional: see art/IMAGE_PROMPTS.md for the exact path
-   each tile expects. Missing files reveal a plain text fallback rather
-   than a broken image, so neither the Gallery nor play depends on art. */
+   Image files remain optional: see art/IMAGE_PROMPTS.md for the active roster.
+   Missing files reveal a designed fallback rather than a broken image, so
+   neither the Gallery nor play depends on art. */
 let gState = { style:'painterly', cat:'archetypes', detail:null };
 
 function archetypeTiles(style){
   return pairedTiles(style,'archetypes',CARD_ARCHETYPES);
 }
 function hookTiles(style){
-  return HOOKS.map(h=>({cat:'hooks', key:h.id, title:h.title, sub:'The Incident', flavor:h.epigraph, path:`art/images/${style}/hooks/${h.id}`}));
+  return HOOKS.map(h=>({cat:'hooks', key:h.id, title:h.title, sub:'The Contract', flavor:h.epigraph, path:`art/images/${style}/hooks/${h.id}`}));
 }
 function omenTiles(style){
   return OMENS.map(o=>({cat:'omens', key:slugify(o.title), title:o.title, sub:o.glyph, flavor:o.line, path:`art/images/${style}/omens/${slugify(o.title)}`}));
@@ -34,10 +34,10 @@ function pairedTiles(style, category, cards){
   });
 }
 const CATS = [
-  {id:'archetypes', label:'Archetypes', build:archetypeTiles},
+  {id:'archetypes', label:'Adventurers', build:archetypeTiles},
   {id:'hooks', label:'Hooks', build:hookTiles},
   {id:'omens', label:'Omens', build:omenTiles},
-  {id:'victims', label:'Victims', build:victimTiles}
+  {id:'victims', label:'Relics', build:victimTiles}
 ];
 
 /* Try a handful of extensions in turn before giving up and revealing the
@@ -45,6 +45,10 @@ const CATS = [
    stops someone from exporting .png/.webp instead. */
 const EXTS = ['jpg','jpeg','png','webp'];
 function imgWithFallback(path, alt){
+  const relative = path.replace(/^art\/images\//,'');
+  if(!artAssetAvailable(relative.split('/')[0], relative.split('/')[1], relative.split('/').slice(2).join('/'))){
+    return '';
+  }
   if(/\.(?:jpe?g|png|webp)$/i.test(path)){
     return `<img loading="lazy" src="${path}" data-base="${path}" data-exts="" onerror="galleryImgError(this)" alt="${esc(alt)}">`;
   }
@@ -128,7 +132,7 @@ function renderGallery(){
       ${CATS.map(c=>`<button class="${c.id===gState.cat?'primary':'ghost'}" onclick="setGalleryCat('${c.id}')">${c.label}</button>`).join('')}
     </div>
     <div class="ggrid gcat-${gState.cat}" style="margin-top:16px">${tiles.map(tileHTML).join('')}</div>
-    <div class="btnrow" style="justify-content:center;margin-top:20px"><button class="primary" onclick="closeOverlay()">Back to the Vale</button></div>`;
+    <div class="btnrow" style="justify-content:center;margin-top:20px"><button class="primary" onclick="closeOverlay()">Back to the Vault</button></div>`;
 }
 export function setGalleryStyle(style){ if(State.G) return; gState.style = style; renderGallery(); }
 export function setGalleryCat(cat){ gState.cat = cat; renderGallery(); }

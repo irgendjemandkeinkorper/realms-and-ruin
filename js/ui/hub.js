@@ -9,7 +9,7 @@ import { viewChronicle } from './renderChronicle.js';
 
 /* ---------------- milestone rail ----------------
    A compact, newest-first digest of the story's key beats — act
-   boundaries, archetypes turning, and Hidden Sins coming to light —
+   boundaries, archetypes turning, and Secret Costs coming to light —
    so the table can glance back without leaving the hub. "The Record"
    (renderChronicle.js) remains the full detailed account; this is a
    summary derived from the same G.journal, not a second source of truth. */
@@ -21,7 +21,7 @@ function computeMilestones(G){
     if(e.struck) return; // stricken things never were
     if(e.act > lastAct) openAct(e.act);
     if(e.type==='close') ms.push({icon:'●', text:`${ACT_NAMES[e.act]} closed — ${e.cardTitle}`});
-    else if(e.type==='secret') ms.push({icon:'✦', text:`A Hidden Sin revealed — ${e.playerName}`});
+    else if(e.type==='secret') ms.push({icon:'✦', text:`A Secret Cost revealed — ${e.playerName}`});
     else if(e.type==='scene') (e.flips||[]).forEach(f=>ms.push({icon:'◆', text:f}));
   });
   if(G.act>=1 && G.act<=3 && G.act>lastAct) openAct(G.act);
@@ -32,7 +32,7 @@ function milestoneRailHTML(G){
   if(!all.length) return '';
   const shown = all.slice().reverse().slice(0,8);
   return `<div class="panel tight ms-rail">
-    <h3 style="color:var(--gold)">The Tale So Far</h3>
+    <h3 style="color:var(--gold)">The Expedition So Far</h3>
     <div class="ms-list">
       ${shown.map((m,i)=>`<div class="ms-row" style="animation-delay:${i*0.05}s" onclick="viewChronicle(true)"><span class="ms-icon">${m.icon}</span><span class="ms-text">${esc(m.text)}</span></div>`).join('')}
     </div>
@@ -84,7 +84,7 @@ export function renderHub(){
   const remaining = G.players.reduce((s,p)=>s+p.scenesLeft,0);
   $('scr-hub').innerHTML = `
     <h2 class="center" style="margin-top:8px">${ACT_NAMES[G.act]}</h2>
-    <p class="center muted">${esc(G.hook.title)} · The Victim: ${esc(G.victim.name)}</p>
+    <p class="center muted">${esc(G.hook.title)} · The Relic: ${esc(G.victim.name)}</p>
     ${actTrackHTML(G.act)}
     <div class="ornament">✦ ❦ ✦</div>
 
@@ -109,7 +109,7 @@ export function renderHub(){
     </div>
 
     <details class="disclose" open>
-      <summary>The Archetypes <span class="small muted">(${G.archetypes.length})</span></summary>
+      <summary>The Adventurers <span class="small muted">(${G.archetypes.length})</span></summary>
       <div class="disclose-body">
         <div class="pgrid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:8px">
           ${G.archetypes.map(a=>archCard(a)).join('')}
@@ -126,7 +126,7 @@ export function renderHub(){
     </details>
 
     <details class="disclose" id="storyteller-hands">
-      <summary>Hands &amp; Hidden Sins <span class="small muted">${G.players.length} storytellers · Scene deck ${G.sceneDeck.length} · Omen deck ${G.omenDeck.length}</span></summary>
+      <summary>Hands &amp; Secret Costs <span class="small muted">${G.players.length} storytellers · Scene deck ${G.sceneDeck.length} · Omen deck ${G.omenDeck.length}</span></summary>
       <div class="disclose-body">
         <div class="pgrid" style="margin-top:8px">
           ${G.players.map((p,i)=>playerPanel(p,i)).join('')}
@@ -162,7 +162,7 @@ export function forfeitScene(pi){
   const G = State.G;
   const p = G.players[pi];
   p.scenesLeft--;
-  G.journal.push({type:'note', act:G.act, text:`${p.name} had neither scene card nor omen to trade, and lost their scene. The Vale went un-narrated a while.`, struck:false});
+  G.journal.push({type:'note', act:G.act, text:`${p.name} had neither scene card nor omen to trade, and lost their scene. The vault went un-narrated a while.`, struck:false});
   afterSceneFlow();
 }
 
@@ -205,7 +205,7 @@ export function renderCloseIntro(){
         <label class="fld">Which archetype leads it?</label>
         <select id="close-arch">${G.archetypes.map((a,i)=>`<option value="${i}">${esc(a.name||a.role)} — ${esc(a.role)}</option>`).join('')}</select>
         <label class="fld">What the camera sees as the close opens</label>
-        <textarea id="close-opening" placeholder="The camera rises above the Vale…"></textarea>
+        <textarea id="close-opening" placeholder="The torchlight rises over the vault…"></textarea>
         <div class="btnrow">
           <button class="primary" onclick="beginClose()">Play the Act Close</button>
         </div>

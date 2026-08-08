@@ -82,16 +82,23 @@ def run() -> None:
 
             response = page.goto(base, wait_until="domcontentloaded")
             assert response and response.status == 200
-            page.wait_for_function("typeof window.showGallery === 'function'")
+            try:
+                page.wait_for_function("typeof window.showGallery === 'function'")
+            except Exception:
+                print("Startup diagnostics:")
+                print("\n".join(errors))
+                print("Failed local requests:")
+                print("\n".join(failed_local_requests))
+                raise
             assert page.locator("#scr-title.active").count() == 1
 
             # Solo setup through the first act hub.
             page.get_by_role(
-                "button", name="Begin the Tale (this screen)", exact=True
+                "button", name="Enter the Under-Vaults", exact=True
             ).click()
             assert "STEP 1 OF 5" in page.locator("#setup-progress-hook").inner_text().upper()
             page.locator(".hookcard").first.get_by_role(
-                "button", name="Choose this Incident", exact=True
+                "button", name="Choose this Contract", exact=True
             ).click()
             assert "STEP 2 OF 5" in page.locator("#setup-progress-players").inner_text().upper()
             page.select_option("#pl-count", "1")
@@ -135,14 +142,14 @@ def run() -> None:
             ).click()
             page.wait_for_selector("#overlay[style*='block']")
             tile = page.locator(".gcat-archetypes .gtile").first
-            assert page.locator(".gcat-archetypes .gtile").count() == 20
+            assert page.locator(".gcat-archetypes .gtile").count() == 6
             quote = tile.locator("[data-gallery-side-quote]")
             front_quote = quote.inner_text()
-            assert tile.locator("[data-gallery-side-label]").inner_text() == "Candlelit"
+            assert tile.locator("[data-gallery-side-label]").inner_text() == "Torchlit"
             tile.locator(".gallery-flip-control").click()
             assert quote.inner_text() == quote.get_attribute("data-back-quote")
             assert quote.inner_text() != front_quote
-            assert tile.locator("[data-gallery-side-label]").inner_text() == "Guttered"
+            assert tile.locator("[data-gallery-side-label]").inner_text() == "Bloodied"
 
             tile.focus()
             page.keyboard.press("Enter")
@@ -154,19 +161,19 @@ def run() -> None:
             page.locator(".gdetail .gallery-flip-control").click()
             assert detail_quote.inner_text() != detail_front
             assert detail_flavor.inner_text() != flavor_front
-            assert page.locator(".gdetail [data-gallery-side-label]").inner_text() == "Guttered"
+            assert page.locator(".gdetail [data-gallery-side-label]").inner_text() == "Bloodied"
             page.locator("#overlay-content > button.ghost").click()
 
-            page.get_by_role("button", name="Victims", exact=True).click()
+            page.get_by_role("button", name="Relics", exact=True).click()
             victim_tiles = page.locator(".gcat-victims .gtile")
-            assert victim_tiles.count() == 15
+            assert victim_tiles.count() == 6
             victim = victim_tiles.first
             victim_quote = victim.locator("[data-gallery-side-quote]")
             victim_front = victim_quote.inner_text()
-            assert victim.locator("[data-gallery-side-label]").inner_text() == "Mourning"
+            assert victim.locator("[data-gallery-side-label]").inner_text() == "Sealed"
             victim.locator(".gallery-flip-control").click()
             assert victim_quote.inner_text() != victim_front
-            assert victim.locator("[data-gallery-side-label]").inner_text() == "Die Nacht"
+            assert victim.locator("[data-gallery-side-label]").inner_text() == "Awakened"
 
             # Online entry should remain reachable without creating a room.
             page.evaluate("window.showOnlineEntry()")

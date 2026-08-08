@@ -18,7 +18,7 @@ function setCount(n){
 const MILESTONES = [
   [1, 'You count the first crow. It counts you back.'],
   [5, 'Five crows now. They have stopped pretending not to watch you.'],
-  [13, 'Thirteen. Someone told you once that this number means something in the Vale. You did not listen.'],
+  [13, 'Thirteen. Someone told you once that this number means something in Kaz-Dahrum. You did not listen.'],
   [25, 'A lantern gutters to life at the treeline. It was not there a moment ago.'],
   [50, 'Something with wings far larger than a crow’s passes overhead. You do not look up.'],
   [100, 'One hundred. The fog has learned your name.'],
@@ -72,7 +72,7 @@ function renderIdlePanel(){
     </div>
     <p class="center" style="margin-top:10px" role="status" aria-live="polite" aria-atomic="true"><span class="idle-count" id="idle-count">${count}</span> <span class="small muted">counted</span></p>
     <p class="small" id="idle-milestone" role="status" aria-live="polite" aria-atomic="true" style="min-height:1.4em;color:#cfc2a2;text-align:center">${currentMilestoneText(count)}</p>
-    <div class="btnrow" style="justify-content:center"><button class="primary" onclick="closeOverlay()">Back to the Vale</button></div>`;
+    <div class="btnrow" style="justify-content:center"><button class="primary" onclick="closeOverlay()">Back to the Vault</button></div>`;
 
   if (activeIsReturn) {
     const returnBtn = document.querySelector('#overlay-content .primary');

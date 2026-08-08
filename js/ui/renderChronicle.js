@@ -31,7 +31,7 @@ export function renderChronicle(interim){
     if(e.type==='note') return `<div class="chron-entry${e.struck?' struck':''}" ${delay}>${strike}<span class="small muted">${esc(e.text)}</span></div>`;
     if(e.type==='secret') return `
       <div class="chron-entry secret${e.struck?' struck':''}" ${delay}>${strike}
-        <div class="ce-head"><span class="ce-title" style="color:#c9b3de">A Hidden Sin Revealed</span>
+        <div class="ce-head"><span class="ce-title" style="color:#c9b3de">A Secret Cost Revealed</span>
           <span class="ce-meta">${esc(e.playerName)} · ${e.combo.map(toneBadge).join(' ')}</span></div>
         <p class="ce-q">“${esc(e.question)}”</p>
         <p class="small muted">Answered through the omens: ${e.omens.map(o=>`${o.glyph} ${esc(o.title)}`).join(' · ')}</p>
@@ -43,7 +43,7 @@ export function renderChronicle(interim){
           <span class="ce-title">${e.type==='close'?'ACT CLOSE — ':''}${esc(e.cardTitle)}</span>
           <span class="ce-meta">led by ${esc(e.playerName)} as ${esc(e.archName)} (${esc(e.archRole)})</span>
         </div>
-        <span class="ce-meta">Tones: ${e.tones.map(toneBadge).join(' ')}</span>
+        <span class="ce-meta">Pressures: ${e.tones.map(toneBadge).join(' ')}</span>
         ${e.element?`<p class="small" style="color:var(--blood-bright)">Commanded to include: ${esc(e.element)}</p>`:''}
         ${e.opening?`<blockquote>${nl2br(e.opening)}</blockquote>`:''}
         ${e.contributions.map(x=>`<p class="small"><span style="color:var(--gold)">${x.kind==='omen'?(x.glyph+' '):''}${esc(x.title)}</span> <span class="muted">(${esc(x.playerName)})</span>${x.how?` — <span>${esc(x.how)}</span>`:''}</p>`).join('')}
@@ -58,12 +58,12 @@ export function renderChronicle(interim){
 
   $('scr-chronicle').innerHTML = `
     <div class="masthead" style="padding-top:16px">
-      <div class="m-over">${over?'The Tale Is Told':'The Record, So Far'}</div>
+      <div class="m-over">${over?'The Expedition Is Complete':'The Record, So Far'}</div>
       <h1 style="font-size:2.4rem">THE REALMS & RUIN CHRONICLE</h1>
       <div class="m-sub">${esc(G.hook.title)} · being a true &amp; faithful account of the death of ${esc(G.victim.name)}</div>
     </div>
     <div class="panel tight">
-      <h3 style="color:var(--gold)">Concerning the Victim</h3>
+      <h3 style="color:var(--gold)">Concerning the Relic</h3>
       ${G.victim.facts.map(f=>`<p class="small" style="margin:5px 0"><span style="color:var(--gold)">${esc(f.who)}, ${esc(f.role)}</span> — <span class="muted">“${esc(f.q)}”</span><br>${esc(f.a)}</p>`).join('')}
     </div>
     <div class="panel tight">
@@ -84,10 +84,10 @@ export function renderChronicle(interim){
         ${EPILOGUE_QUESTIONS.map(q=>`<p class="small" style="color:#cfc2a2;margin:8px 0">— ${esc(q)}</p>`).join('')}
       </div>`:''}
     <div class="btnrow" style="justify-content:center;margin-top:20px">
-      ${interim?`<button class="primary" onclick="returnFromChronicle()">Return to the Tale</button>`:''}
+      ${interim?`<button class="primary" onclick="returnFromChronicle()">Return to the Expedition</button>`:''}
       <button onclick="copyChronicle()" id="btn-copy">Copy as Markdown</button>
       <button onclick="downloadChronicle()">Download the Chronicle</button>
-      ${over?`<button class="blood" onclick="location.reload()">Begin Another Tale</button>`:''}
+      ${over?`<button class="blood" onclick="location.reload()">Begin Another Expedition</button>`:''}
     </div>
     <p class="small muted center" style="margin-top:8px">Anything stricken from the record never was. No questions asked; no reasons owed.</p>`;
 }
@@ -117,9 +117,9 @@ export function showRules(){
   markIntroSeen();
   dismissFirstrunHint();
   $('overlay-content').innerHTML = `
-    <h2 style="color:var(--gold)">How the Tale Is Told</h2>
+    <h2 style="color:var(--gold)">How the Expedition Is Told</h2>
     <div class="panel tight small" style="line-height:1.7">
-      <p><strong style="color:var(--gold)">The shape of it.</strong> One sitting, three acts, one death. You will establish the Victim by answering questions, then take turns beginning scenes — each storyteller begins one scene per act (more in small groups; three in solo). After everyone's scenes, the Act Close plays, and a new act begins. After the third close, the Chronicle is complete.</p>
+      <p><strong style="color:var(--gold)">The shape of it.</strong> One sitting, three acts, one descent. You will establish the Relic and the Adventurers by answering questions, then take turns beginning scenes — each storyteller begins one scene per act (more in small groups; three in solo). After everyone's scenes, the Act Close plays, and a new act begins. After the third close, the Chronicle is complete.</p>
     </div>
 
     <h3 class="center" style="color:var(--gold);margin-top:16px">Anatomy of a Scene</h3>
@@ -128,15 +128,15 @@ export function showRules(){
     <div class="panel tight small" style="line-height:1.7">
       <p><strong style="color:var(--gold)">Beginning a scene.</strong> Choose a scene card from your hand and an archetype to lead it. Describe what the camera sees as the scene opens, then narrate freely — as director, as actor, or both. Cast the others in roles; no one owns any character. The prompt on the card is a door, not a cage.</p>
       <p><strong style="color:var(--gold)">Buying in.</strong> Any other storyteller may play one card into your scene — a scene card from their hand, or an omen from the row — and describe how it manifests. Three cards at most may enter a scene, counting the first. The one who began the scene decides when it ends.</p>
-      <div class="rules-example">For example: Alice begins with <strong>The Wake</strong> (Guilt), led by the Alienist. Bob plays <strong>A Tarnished Pocket Watch</strong> from the omen row, describing it stopped at the hour of death in a mourner's pocket. That's two cards in the scene — one more storyteller could still buy in before Alice ends it.</div>
+      <div class="rules-example">For example: Alice begins with <strong>The Wake</strong> (Crew), led by the Alienist. Bob plays <strong>A Tarnished Pocket Watch</strong> from the omen row, describing it stopped at the hour of death in a mourner's pocket. That's two cards in the scene — one more storyteller could still buy in before Alice ends it.</div>
       <p><strong style="color:var(--gold)">Omens.</strong> Interpret them literally, metaphorically, or obliquely. They accrue meaning with each recurrence. After a scene, an omen you played returns to you; trade it back to the omen deck at the table any time to draw a fresh scene card. If you must begin a scene with no scene card and no omen to trade, you lose your scene for the act.</p>
       <div class="rules-example">For example: if <strong>The Extinguished Candle</strong> has already appeared twice this session — once literally, once as a metaphor for a marriage gone cold — a third appearance doesn't need explaining. The table already knows what it means now.</div>
       <p><strong style="color:var(--gold)">Turning the archetypes.</strong> When a scene ends, check every archetype's face-up condition — if it was met, the card turns, and its tone changes with it.</p>
       <p><strong style="color:var(--gold)">The tones.</strong> ${TONES.map(t=>`<span>${t}</span> — ${TONE_GLOSS[t]}`).join(' ')}</p>
-      <p><strong style="color:var(--gold)">Hidden Sins.</strong> Each storyteller holds one secret keyed to a combination of tones. When a scene's counted tones contain that combination, the sin comes to light at once: a bonus vignette told through three omens, answering the secret's question. Each sin is revealed but once.</p>
-      <div class="rules-example">For example: a scene's counted tones land on Guilt, Guilt, Dread. If a storyteller holds a secret keyed to exactly that combination, it comes to light immediately — even mid-act, before the next storyteller begins their own scene.</div>
+      <p><strong style="color:var(--gold)">Secret Costs.</strong> Each storyteller holds one secret keyed to a combination of tones. When a scene's counted tones contain that combination, the sin comes to light at once: a bonus vignette told through three omens, answering the secret's question. Each sin is revealed but once.</p>
+      <div class="rules-example">For example: a scene's counted tones land on Crew, Crew, Ruin. If a storyteller holds a secret keyed to exactly that combination, it comes to light immediately — even mid-act, before the next storyteller begins their own scene.</div>
       <p><strong style="color:var(--gold)">The Act Close.</strong> Its condition names who begins it; the act's most numerous tone commands an element it must include. Others may buy in as usual.</p>
-      <div class="rules-example">For example: if Dread came up most often this act, the Close might command "include a lantern that goes out and will not relight" — whoever the condition names begins the scene, and must weave that in somewhere.</div>
+      <div class="rules-example">For example: if Ruin came up most often this act, the Close might command "include a lantern that goes out and will not relight" — whoever the condition names begins the scene, and must weave that in somewhere.</div>
       <p><strong style="color:var(--blood-bright)">The Strike.</strong> Anyone may strike anything from the story at any moment — no questions asked, no reasons owed. Use the ☒ in the Record, or simply say so aloud. The stricken thing never was. Care for the people at your table above all else.</p>
     </div>
     <div class="btnrow"><button class="primary" onclick="returnToGame()">Return to the Game</button></div>`;

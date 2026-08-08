@@ -3,7 +3,7 @@ import { State } from './state.js';
 
 export function actToneCounts(){
   const G = State.G;
-  const c = {Obsession:0,Guilt:0,Dread:0};
+  const c = {Job:0,Crew:0,Ruin:0};
   if(!G) return c;
   G.discardTones.forEach(t=>c[t]++);
   G.archetypes.forEach(a=>c[faceUp(a).tone]++);
@@ -13,14 +13,14 @@ export const faceUp = a => a.sides[a.flipped?1:0];
 
 export function matchSecret(tones, fromPi){
   const G = State.G;
-  const counts = {Obsession:0,Guilt:0,Dread:0};
+  const counts = {Job:0,Crew:0,Ruin:0};
   tones.forEach(t=>counts[t]++);
   const np = G.players.length;
   for(let k=1;k<=np;k++){
     const pi = (fromPi+k)%np;
     for(const s of G.players[pi].secrets){
       if(s.used) continue;
-      const need = {Obsession:0,Guilt:0,Dread:0};
+      const need = {Job:0,Crew:0,Ruin:0};
       s.combo.forEach(t=>need[t]++);
       if(TONES.every(t=>counts[t]>=need[t])) return {pi, secret:s};
     }

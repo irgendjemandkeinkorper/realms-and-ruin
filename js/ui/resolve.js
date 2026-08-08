@@ -33,7 +33,7 @@ export function renderResolve(){
         </div>`;
       }).join('')}
       <div class="btnrow">
-        <button class="primary" onclick="applyResolve()">Count the Tones</button>
+        <button class="primary" onclick="applyResolve()">Resolve the Scene</button>
       </div>
     </div>`;
 }
@@ -86,7 +86,7 @@ export function renderSecretUnlock(unlock, tones){
   $('scr-secret').innerHTML = `
     <div class="center" style="margin-top:20px">
       <div class="sc" style="color:#c9b3de;letter-spacing:.35em;font-size:.85rem">THE TONES ALIGN — ${tones.map(t=>t.toUpperCase()).join(', ')}</div>
-      <h2 style="color:#c9b3de;margin-top:6px">A Hidden Sin Comes to Light</h2>
+      <h2 style="color:#c9b3de;margin-top:6px">A Secret Cost Comes to Light</h2>
       <p class="muted">${esc(p.name)}’s secret is unlocked. This is a bonus scene: theirs alone. No cards may be played into it.</p>
     </div>
     <div class="ornament" style="color:#8a63a8">✧</div>

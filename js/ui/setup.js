@@ -8,17 +8,17 @@ import { artStylePickerHTML, archetypeArtHTML, hookArtHTML, victimArtHTML } from
 
 /* ---------------- setup: hooks ---------------- */
 export function renderHooks(){
-  $('setup-progress-hook').innerHTML = setupProgressHTML(0,'Choose an Incident','Pick the premise that sounds most interesting to your table.');
+  $('setup-progress-hook').innerHTML = setupProgressHTML(0,'Choose a Contract','Pick the premise that sounds most interesting to your table.');
   const hintEl = $('hook-firsttime-hint');
   if(hintEl) hintEl.style.display = hasSeenIntro() ? 'none' : 'flex';
   $('hook-list').innerHTML = HOOKS.map((h,i)=>`
     <div class="hookcard" onclick="chooseHook(${i})">
-      <div class="sc" style="color:var(--blood-bright);font-size:.75rem;letter-spacing:.25em">INCIDENT ${ROMAN[i+1]}</div>
+      <div class="sc" style="color:var(--blood-bright);font-size:.75rem;letter-spacing:.25em">CONTRACT ${ROMAN[i+1]}</div>
       <h3>${h.title}</h3>
       <div class="h-epi">${h.epigraph}</div>
       <hr class="rule">
       <div class="small" style="color:#cfc2a2">${h.victimLine}</div>
-      <div class="btnrow" style="margin-top:16px"><button class="primary hookcard-action" onclick="event.stopPropagation();chooseHook(${i})">Choose this Incident</button></div>
+      <div class="btnrow" style="margin-top:16px"><button class="primary hookcard-action" onclick="event.stopPropagation();chooseHook(${i})">Choose this Contract</button></div>
     </div>`).join('');
 }
 export function chooseHook(i){ State.pendingHook = HOOKS[i]; show('scr-players'); renderPlayerInputs(); }
@@ -36,16 +36,16 @@ export function renderPlayerInputs(){
   $('pl-names').innerHTML = html;
   $('pl-art-style').innerHTML = State.pendingHook ? artStylePickerHTML(State.pendingHook.id,'art-style',selectedStyle) : '';
   $('pl-note').textContent =
-    n===1 ? 'Solo mode: you will voice every archetype, play three scenes per act, and carry two Hidden Sins.' :
+    n===1 ? 'Solo mode: you will voice every archetype, play three scenes per act, and carry two Secret Costs.' :
     n===2 ? 'Two storytellers: each of you begins two scenes per act.' :
-    'Each storyteller begins one scene per act. Archetypes belong to no one — pass them freely.';
+    'Each storyteller begins one scene per act. Adventurers belong to no one — pass them freely.';
 }
 export function confirmPlayers(){
   const n = +$('pl-count').value;
   const artChoice = document.querySelector('input[name="art-style"]:checked');
   if(!artChoice){
     const error = $('art-style-error');
-    if(error) error.textContent = 'Choose Painterly Gothic or Tarot Gothic before lighting the candles.';
+    if(error) error.textContent = 'Choose Dungeon Oil or Vault Woodcut before entering the vault.';
     document.querySelector('.art-style-picker')?.scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
@@ -65,7 +65,7 @@ export function confirmPlayers(){
   const G = State.G;
   $('intro-art').innerHTML = hookArtHTML(G.hook,{className:'incident-intro-art'});
   $('intro-text').innerHTML = G.hook.intro;
-  $('setup-progress-intro').innerHTML = setupProgressHTML(2,'Read the Incident aloud','Give the table the premise before the questions begin.');
+  $('setup-progress-intro').innerHTML = setupProgressHTML(2,'Read the Contract aloud','Give the table the premise before the questions begin.');
   show('scr-intro');
 }
 
@@ -76,15 +76,15 @@ export function renderArchSetup(){
   const i = G.archIdx, a = G.archetypes[i];
   const answerer = G.players[i % G.players.length];
   $('scr-archsetup').innerHTML = `
-    ${setupProgressHTML(3,'Establish the Archetypes',`Question ${i+1} of six — ${esc(answerer.name)} answers next.`)}
-    <p class="center muted sc" style="letter-spacing:.2em">ESTABLISHING THE DEAD</p>
+    ${setupProgressHTML(3,'Establish the Adventurers',`Question ${i+1} of six — ${esc(answerer.name)} answers next.`)}
+        <p class="center muted sc" style="letter-spacing:.2em">ESTABLISHING THE ADVENTURERS</p>
     ${progressDotsHTML(i, 6, `Question ${ROMAN[i+1]} of VI`)}
     <div class="ornament">❦</div>
     <div style="max-width:760px;margin:0 auto">
       <div class="setup-card-layout">
         ${archetypeArtHTML(a,0,{className:'setup-card-art'})}
         <div class="card">
-        <div class="c-kicker">Archetype</div>
+        <div class="c-kicker">Adventurer</div>
         <div class="c-title" style="font-size:1.5rem">${a.role}</div>
         <div class="c-prompt">${a.flavor}</div>
         <hr class="rule" style="border-color:rgba(60,45,25,.3)">
@@ -95,13 +95,13 @@ export function renderArchSetup(){
         </div>
       </div>
       <div class="panel">
-        <p class="small muted">${esc(answerer.name)} answers — in character, or plainly. The answer becomes a fact about the Victim and about this archetype.</p>
-        <label class="fld">Name this archetype</label>
+        <p class="small muted">${esc(answerer.name)} answers — in character, or plainly. The answer becomes a fact about the relic and about this adventurer.</p>
+        <label class="fld">Name this adventurer</label>
         <input type="text" id="arch-name" placeholder="e.g. Dr. Ambrose Vane">
         <label class="fld">The answer</label>
         <textarea id="arch-answer" placeholder="What is established…"></textarea>
         <div class="btnrow">
-          <button class="primary" onclick="saveArchSetup()">${i<5?'Next Question':'To the Victim'}</button>
+          <button class="primary" onclick="saveArchSetup()">${i<5?'Next Question':'Name the Relic'}</button>
         </div>
       </div>
     </div>`;
@@ -130,8 +130,8 @@ export function saveArchSetup(){
 export function renderVictim(){
   const G = State.G;
   $('scr-victim').innerHTML = `
-    ${setupProgressHTML(4,'Name the Victim','Gather the six answers, then give the dead a name.')}
-    <h2 class="center">The Victim</h2>
+    ${setupProgressHTML(4,'Name the Relic','Gather the six answers, then name what the party came to recover.')}
+    <h2 class="center">The Relic</h2>
     <p class="center muted" style="max-width:640px;margin:6px auto">${G.hook.victimLine}</p>
     <div class="ornament">❦</div>
     <div class="victim-setup-layout">
@@ -141,8 +141,8 @@ export function renderVictim(){
           ${G.victim.facts.map(f=>`<p class="small" style="margin:6px 0"><span style="color:var(--gold)">${esc(f.role)}:</span> <span>${esc(f.a)}</span></p>`).join('')}
         </div>
         <div class="panel">
-          <label class="fld">Together, name the deceased</label>
-          <input type="text" id="victim-name" placeholder="This is usually the hardest part.">
+          <label class="fld">Together, name the relic</label>
+          <input type="text" id="victim-name" placeholder="Name the relic, or leave it unnamed.">
           <div class="btnrow">
             <button class="primary" onclick="finishVictim()">Deal the Cards</button>
           </div>
@@ -153,7 +153,7 @@ export function renderVictim(){
 }
 export function finishVictim(){
   const G = State.G;
-  G.victim.name = ($('victim-name').value||'').trim() || 'The Nameless Dead';
+  G.victim.name = ($('victim-name').value||'').trim() || 'The Unnamed Relic';
   // omens & secrets are dealt once, at the start
   G.omenDeck = shuffle(OMENS);
   G.omenRow = G.omenDeck.splice(0,6);

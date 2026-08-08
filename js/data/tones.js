@@ -1,6 +1,6 @@
-export const TONES = ['Obsession','Guilt','Dread'];
+export const TONES = ['Job','Crew','Ruin'];
 export const TONE_GLOSS = {
-  Obsession:'the need to know, to possess, to pursue the truth of the death past all decency and reason.',
-  Guilt:'the weight of complicity — the urge to conceal, to atone, to keep the town’s shame behind its shutters.',
-  Dread:'the growing certainty that something is wrong here beyond murder — and that it is not finished.'
+  Job:'the contract, the relic, the map, and the gold that brought the expedition below.',
+  Crew:'the people beside you, the oath to bring them home, and the supplies you spend to keep that promise.',
+  Ruin:'the vault’s instability — clockwork law, wild magic, corruption, and the thing waking underneath it all.'
 };

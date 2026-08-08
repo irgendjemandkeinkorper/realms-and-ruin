@@ -1,11 +1,10 @@
 # Roadmap
 
-- [ ] Resolve the standalone-vs-compatibility rules decision.
-- [ ] Define character creation: role, background, resource, and one personal oath.
-- [ ] Write the core scene procedure and the Job/Crew state transitions.
-- [ ] Define the Ordered/Balanced/Chaotic transition table.
-- [ ] Draft the three-act Kaz-Dahrum starter descent.
-- [ ] Add six pregenerated characters and one rival expedition.
+- [ ] Replace the content data pack with Kaz-Dahrum contracts, roles, scenes, omens, and relic consequences.
+- [ ] Add visible Job, Crew, and Ordered/Chaotic state indicators.
+- [ ] Rewrite the rules overlay and onboarding copy for the D&D-compatible expedition loop.
+- [ ] Generate and wire original role, contract, omen, and relic art.
+- [ ] Add six pregenerated adventurers and one rival expedition.
 - [ ] Run solo, 2-player, 4-player, and 6-player pacing tests.
 - [ ] Record playtest findings in `docs/playtests/`.
-- [ ] Decide on final visual direction and original asset workflow.
+- [ ] Decide on final visual direction between oil-fantasy and woodcut-ink treatments.

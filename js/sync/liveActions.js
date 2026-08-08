@@ -263,15 +263,15 @@ export async function liveClaimSecret(code, journalIndex){
     const pref = privateRef(code, uid);
     const psnap = await t.get(pref);
     const priv = psnap.exists() ? psnap.data() : {hand:[], secrets:[]};
-    const counts = {Obsession:0,Guilt:0,Dread:0};
+    const counts = {Job:0,Crew:0,Ruin:0};
     entry.tones.forEach(tn=>counts[tn]++);
     let matchIdx = -1;
     for(let si=0; si<priv.secrets.length; si++){
       const s = priv.secrets[si];
       if(s.used) continue;
-      const need = {Obsession:0,Guilt:0,Dread:0};
+      const need = {Job:0,Crew:0,Ruin:0};
       s.combo.forEach(tn=>need[tn]++);
-      if(['Obsession','Guilt','Dread'].every(tn=>counts[tn]>=need[tn])){ matchIdx = si; break; }
+      if(['Job','Crew','Ruin'].every(tn=>counts[tn]>=need[tn])){ matchIdx = si; break; }
     }
     if(matchIdx<0) throw new Error('No matching Hidden Sin.');
 

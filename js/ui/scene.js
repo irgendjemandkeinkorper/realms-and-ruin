@@ -28,7 +28,7 @@ export function renderScenePick(){
     <div class="ornament">❦</div>
     <h3 style="color:var(--gold)">Choose a scene card from your hand</h3>
     <div class="cardgrid">${p.hand.map((sc,i)=>sceneCardHTML(sc,'pickSceneCard',i)).join('')}</div>
-    <h3 style="color:var(--gold)">Choose the lead archetype</h3>
+    <h3 style="color:var(--gold)">Choose the lead adventurer</h3>
     <div class="pgrid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:8px">
       ${G.archetypes.map((a,i)=>archCard(a,'pickArch',i)).join('')}
     </div>

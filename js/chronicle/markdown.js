@@ -9,13 +9,13 @@ export function buildMarkdown(){
   const L = [];
   L.push('# THE REALMS & RUIN CHRONICLE');
 
-  const hookTitle = (G && G.hook && G.hook.title) ? G.hook.title : 'An Untold Tale';
+  const hookTitle = (G && G.hook && G.hook.title) ? G.hook.title : 'An Untold Expedition';
   L.push(`## ${hookTitle}`);
 
   const victimName = (G && G.victim && G.victim.name) ? G.victim.name : 'the Deceased';
   L.push(`*Being a true & faithful account of the death of **${victimName}**.*`, '');
 
-  L.push('### Concerning the Victim');
+  L.push('### Concerning the Relic');
   const facts = (G && G.victim && Array.isArray(G.victim.facts)) ? G.victim.facts : [];
   facts.forEach(f => {
     if (!f) return;
@@ -30,7 +30,7 @@ export function buildMarkdown(){
   const archetypes = (G && Array.isArray(G.archetypes)) ? G.archetypes : [];
   archetypes.forEach(a => {
     if (!a) return;
-    const name = a.name || a.role || 'Unnamed Archetype';
+    const name = a.name || a.role || 'Unnamed Adventurer';
     const role = a.role || 'No Role';
     const flippedText = a.flipped ? ' *(turned)*' : '';
     let tone = 'Unknown';
@@ -61,7 +61,7 @@ export function buildMarkdown(){
       if (e.type === 'secret') {
         const playerName = e.playerName || 'Anonymous';
         const question = e.question || 'A Secret';
-        L.push('', `### ✧ A Hidden Sin Revealed — ${playerName}`);
+        L.push('', `### ✧ A Secret Cost Revealed — ${playerName}`);
         L.push(`> **“${question}”**`);
         const omens = Array.isArray(e.omens) ? e.omens : [];
         const omenTitles = omens.map(o => (o && o.title) || 'Unknown Omen').filter(Boolean);
@@ -80,7 +80,7 @@ export function buildMarkdown(){
       const archRole = e.archRole || 'No Role';
       const tonesList = Array.isArray(e.tones) ? e.tones.map(t => t || 'Unknown') : [];
       const tonesText = tonesList.length ? tonesList.join(', ') : 'None';
-      L.push(`*Led by ${playerName} as ${archName} (${archRole}). Tones: ${tonesText}.*`);
+      L.push(`*Led by ${playerName} as ${archName} (${archRole}). Pressures: ${tonesText}.*`);
 
       if (e.element && String(e.element).trim()) {
         L.push(`*Commanded to include: ${String(e.element).trim()}*`);

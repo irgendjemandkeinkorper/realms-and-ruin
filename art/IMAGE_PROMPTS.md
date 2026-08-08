@@ -1,14 +1,18 @@
-# Blackwood Vale — Gemini Image Prompt Sheet
+# Realms & Ruin — Kaz-Dahrum Image Prompt Sheet
 
-Prompts for generating card art with Gemini's image model ("Nano Banana" /
-Imagen). Two full styles are provided for every card — generate whichever
+> The active art roster is the original Kaz-Dahrum set below. Older prompt
+> material retained farther down this file is archival reference from the
+> starter scaffold and is not part of the live game.
+
+Prompts for generating card art with an image model. Two full styles are
+provided for every card — generate whichever
 you prefer, or both, and use the in-app Gallery's style toggle to compare
 them side by side once the files are in place.
 
-- **Style A — Painterly Gothic Illustration.** Moody, desaturated oil
-  painting, cinematic single-scene composition.
-- **Style B — Tarot Gothic.** Flat-color, linework-accented, symmetrical
-  Major-Arcana-style iconography.
+- **Style A — Dungeon Oil.** Torch-amber and deep-violet oil painting,
+  ancient dwarven masonry, brass mechanisms, and expressive adventurers.
+- **Style B — Vault Woodcut.** High-contrast black-and-ivory engraving,
+  tactile cross-hatching, with a single ember-red or eerie-green accent.
 
 ## File naming & folder convention
 
@@ -22,8 +26,9 @@ art/images/<style>/<category>/<slug>.<ext>
 
 <style>    painterly | tarot
 <category> archetypes | hooks | omens | victims
-<slug>     archetypes: "<role-slug>--front" or "<role-slug>--turned"
-           hooks & victims: the hook id (seance | manor | ripper | debutante)
+<slug>     archetypes: "<role-slug>-candlelit-v1" or "<role-slug>-guttered-v1"
+           victims: "<relic-slug>-mourning-v1" or "<relic-slug>-die-nacht-v1"
+           hooks: the contract id; omens: the slugified omen title
            omens: the omen title, slugified
 <ext>      jpg — the Gallery also tries .jpeg, .png, .webp automatically,
            so any of those work if jpg isn't what you exported

@@ -17,7 +17,7 @@ function archFaceHTML(a, sideIdx, turned){
     </div>
   </div>`;
 }
-/* Archetypes are the only two-sided cards — every side has real,
+/* Adventurers are the only two-sided cards — every side has real,
    different content (a different flip condition and Tone). The card
    shows whichever side is currently face-up per game state (the
    "front"), but a small flip control lets a player peek at the other
@@ -25,7 +25,7 @@ function archFaceHTML(a, sideIdx, turned){
    toggle (see flipArchCard below), not game state. */
 export function archCard(a, selectable, idx){
   const frontIdx = a.flipped?1:0, backIdx = a.flipped?0:1;
-  const pickAttrs = selectable ? `role="button" tabindex="0" aria-label="Choose ${esc(a.name||a.role)} as the lead archetype" aria-pressed="false" onclick="${selectable}(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${selectable}(${idx})}" id="arch-pick-${idx}"` : '';
+  const pickAttrs = selectable ? `role="button" tabindex="0" aria-label="Choose ${esc(a.name||a.role)} as the lead adventurer" aria-pressed="false" onclick="${selectable}(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${selectable}(${idx})}" id="arch-pick-${idx}"` : '';
   const detailAttrs = selectable ? '' : `onclick="openCardDetail('archetype',${JSON.stringify(a).replace(/"/g,'&quot;')})" role="button" tabindex="0" aria-label="Read ${esc(a.name||a.role)}"`;
   return `<div class="arch-flip${selectable?' selectable':''}" ${pickAttrs} ${detailAttrs}>
     <button class="flip-btn" type="button" onclick="event.stopPropagation();flipArchCard(this)" onkeydown="event.stopPropagation()" aria-label="Peek at the other side" title="Peek at the other side">⟳</button>
@@ -51,7 +51,7 @@ export function sceneAnatomyDiagramHTML(){
         <div class="card mini"><div class="c-kicker">Scene</div><div class="c-title">The Wake</div></div>
         <div class="arch mini"><div class="a-name">The Disgraced Alienist</div></div>
       </div>
-      <div class="td-caption">Pick a scene card and the archetype who leads it.</div>
+      <div class="td-caption">Pick a scene card and the adventurer who leads it.</div>
     </div>
     <div class="td-arrow">→</div>
     <div class="td-step">
@@ -77,9 +77,9 @@ export function sceneAnatomyDiagramHTML(){
       <div class="td-num">4</div>
       <div class="td-label">Resolve</div>
       <div class="td-visual">
-        <div style="display:flex;gap:4px">${toneBadge('Guilt')}${toneBadge('Dread')}</div>
+        <div style="display:flex;gap:4px">${toneBadge('Crew')}${toneBadge('Ruin')}</div>
       </div>
-      <div class="td-caption">Check every archetype for a flip, then count the scene's tones.</div>
+      <div class="td-caption">Check every adventurer for a flip, then resolve the scene pressures.</div>
     </div>
   </div>`;
 }
@@ -197,7 +197,7 @@ export function sceneTrackerHTML(G, opts={}){
     return `<span class="scene-player ${cls}"><strong>${esc(p.name)}</strong><small>${status}${mine}</small></span>`;
   }).join('');
 
-  const context = [G.hook?.title, G.victim?.name ? `The Victim: ${G.victim.name}` : null].filter(Boolean).map(esc).join(' · ');
+  const context = [G.hook?.title, G.victim?.name ? `The Relic: ${G.victim.name}` : null].filter(Boolean).map(esc).join(' · ');
   const arrived = animateSlot!==null ? cards[animateSlot] : null;
   return `${arrived?`<div class="scene-arrival-callout" aria-live="polite"><span>${esc(arrived.owner)}</span> ${animateSlot===0?'opens the scene with':'adds'} <strong>${esc(arrived.card.title)}</strong></div>`:''}
   <section class="scene-tracker${resolving?' resolving':''}${arrived?' card-arrival':''}" aria-label="Current scene tracker">
@@ -216,7 +216,7 @@ export function sceneTrackerHTML(G, opts={}){
 
     <div class="scene-brief">
       <span><small>Directed by</small><strong>${esc(starter.name)}</strong></span>
-      <span><small>Lead archetype</small><strong>${esc(lead.name||lead.role)}</strong></span>
+      <span><small>Lead adventurer</small><strong>${esc(lead.name||lead.role)}</strong></span>
     </div>
     ${c.opening?`<blockquote class="scene-opening"><span>The camera sees</span>${nl2br(c.opening)}</blockquote>`:''}
 
@@ -231,7 +231,7 @@ export function sceneTrackerHTML(G, opts={}){
 
     <div class="scene-tone-tracker">
       <div class="scene-tone-copy">
-        <span>Tones in play</span>
+        <span>Pressures in play</span>
         <small>The lead’s tone may change when the scene resolves.</small>
       </div>
       <div class="scene-tone-sources">${toneSources.map(x=>`<span>${toneBadge(x.tone)}<small>${esc(x.source)}</small></span>`).join('')}</div>
@@ -253,7 +253,7 @@ export function journalEntrySummaryHTML(entry, opts){
   }
   if(entry.type==='secret'){
     return `<div class="panel tight" style="border-color:#8a63a8">
-      <h3 style="color:#c9b3de">${compact?'Just revealed — ':''}A Hidden Sin: ${esc(entry.playerName)}</h3>
+      <h3 style="color:#c9b3de">${compact?'Just revealed — ':''}A Secret Cost: ${esc(entry.playerName)}</h3>
       <p class="small" style="color:#e0d4ec">“${esc(entry.question)}”</p>
       <p class="small muted">Shown through: ${entry.omens.map(o=>`${o.glyph} ${esc(o.title)}`).join(' · ')}</p>
     </div>`;
@@ -266,7 +266,7 @@ export function journalEntrySummaryHTML(entry, opts){
     <p class="small">Led by <strong>${esc(entry.playerName)}</strong> as ${esc(entry.archName)} (${esc(entry.archRole)})</p>
     <p class="small" style="color:var(--gold);margin-top:6px">Cards &amp; characters played</p>
     ${contribHTML}
-    <p class="small muted" style="margin-top:6px">Tones: ${entry.tones.map(toneBadge).join(' ')}</p>
+    <p class="small muted" style="margin-top:6px">Pressures: ${entry.tones.map(toneBadge).join(' ')}</p>
     ${entry.flips.length?`<p class="small muted">${entry.flips.map(esc).join('; ')}.</p>`:''}
   </div>`;
 }
@@ -283,7 +283,7 @@ export function playerPanel(p,i){
       <div class="held-card">${omenCard(o)}
       ${G.sceneDeck.length?`<button class="ghost" onclick="tradeOmen(${i},${oi})">Trade for a scene card</button>`:'<span class="small muted">Scene deck empty</span>'}</div>`).join('')}</div>`:''}
     ${p.secrets.map(s=>`
-      <details class="secretbox"><summary>Hidden Sin ${s.used?'— revealed':'(theirs alone to read)'}</summary>
+      <details class="secretbox"><summary>Secret Cost ${s.used?'— revealed':'(theirs alone to read)'}</summary>
         <div class="small" style="margin-top:6px">${s.combo.map(toneBadge).join(' ')}<br>
         <span style="color:#c9b3de">${esc(s.q)}</span>
         ${s.used?'':'<br><span class="muted">Unlocks when a scene’s tones contain this combination.</span>'}</div>

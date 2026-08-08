@@ -3,11 +3,45 @@ import { State } from '../engine/state.js';
 import { archetypeCardForRole, pairedCardStem } from '../data/cardFaces.js';
 
 export const ART_STYLES = [
-  {id:'painterly', label:'Painterly Gothic', note:'Cinematic oils, fog, candlelight, and Victorian chiaroscuro.'},
-  {id:'tarot', label:'Tarot Gothic', note:'Bold Arcana-like figures, jewel tones, and ceremonial linework.'}
+  {id:'painterly', label:'Dungeon Oil', note:'Warm torchlight, deep violet stone, hand-painted texture, and gilded relic detail.'},
+  {id:'tarot', label:'Vault Woodcut', note:'High-contrast ink engraving, cross-hatching, and restrained ember-red accents.'}
 ];
 
 const ART_EXTS = ['jpg','jpeg','png','webp'];
+
+/* Generated assets are intentionally opt-in. A missing card illustration
+   should reveal the designed fallback panel without making the browser chase
+   four dead URLs for every card face. Add a key here as new art lands. */
+const READY_ART = new Set([
+  'painterly/archetypes/oathbound-shield-candlelit-v1.png',
+  'painterly/archetypes/oathbound-shield-guttered-v1.png',
+  'painterly/archetypes/rift-scholar-candlelit-v1.png',
+  'painterly/archetypes/rift-scholar-guttered-v1.png',
+  'painterly/archetypes/delver-rogue-candlelit-v1.png',
+  'painterly/archetypes/delver-rogue-guttered-v1.png',
+  'painterly/archetypes/ashen-acolyte-candlelit-v1.png',
+  'painterly/archetypes/ashen-acolyte-guttered-v1.png',
+  'painterly/archetypes/beastwarden-candlelit-v1.png',
+  'painterly/archetypes/beastwarden-guttered-v1.png',
+  'painterly/archetypes/clockwork-tinkerer-candlelit-v1.png',
+  'painterly/archetypes/clockwork-tinkerer-guttered-v1.png',
+  'painterly/victims/star-metal-seal-mourning-v1.png',
+  'painterly/victims/star-metal-seal-die-nacht-v1.png',
+  'painterly/victims/living-silver-map-mourning-v1.png',
+  'painterly/victims/living-silver-map-die-nacht-v1.png',
+  'painterly/victims/black-crystal-keystone-mourning-v1.png',
+  'painterly/victims/black-crystal-keystone-die-nacht-v1.png',
+  'painterly/victims/brass-command-crown-mourning-v1.png',
+  'painterly/victims/brass-command-crown-die-nacht-v1.png',
+  'painterly/victims/clockwork-heart-mourning-v1.png',
+  'painterly/victims/clockwork-heart-die-nacht-v1.png',
+  'painterly/victims/nameless-fragment-mourning-v1.png',
+  'painterly/victims/nameless-fragment-die-nacht-v1.png'
+]);
+
+export function artAssetAvailable(style, category, key){
+  return READY_ART.has(`${normalizeArtStyle(style)}/${category}/${key}`);
+}
 
 export function normalizeArtStyle(style){
   return ART_STYLES.some(s=>s.id===style) ? style : 'painterly';
@@ -43,9 +77,10 @@ export function gameArtImgError(img){
 export function gameArtHTML(category, key, alt, opts={}){
   const style = normalizeArtStyle(opts.style ?? currentArtStyle());
   const classes = ['game-art', opts.className||''].filter(Boolean).join(' ');
+  const image = artAssetAvailable(style,category,key) ? artImageHTML(artPath(style,category,key),alt) : '';
   return `<div class="${classes}">
     <div class="game-art-fallback"><span>${esc(opts.fallback||alt)}</span></div>
-    ${artImageHTML(artPath(style,category,key),alt)}
+    ${image}
   </div>`;
 }
 
@@ -69,16 +104,16 @@ export function hookArtHTML(hook, opts={}){
 }
 
 export function victimArtHTML(hook, opts={}){
-  return gameArtHTML('victims',hook.id,`The victim of ${hook.title}`,opts);
+  return gameArtHTML('victims',hook.id,`The relic from ${hook.title}`,opts);
 }
 
 /* Used during both local and online creation. The currently selected
-   Incident supplies a meaningful preview in each style; no option is
+   Contract supplies a meaningful preview in each style; no option is
    preselected unless the caller explicitly provides one. */
 export function artStylePickerHTML(hookId, name, selected=null){
   return `<fieldset class="art-style-picker">
-    <legend>Choose this tale’s art style</legend>
-    <p>The choice is locked for this game so every card shares one visual language.</p>
+    <legend>Choose this expedition’s card style</legend>
+    <p>The choice is locked for this expedition so every card shares one visual language.</p>
     <div class="art-style-options">
       ${ART_STYLES.map(style=>`<label class="art-style-option">
         <input type="radio" name="${esc(name)}" value="${style.id}" ${selected===style.id?'checked':''} required>

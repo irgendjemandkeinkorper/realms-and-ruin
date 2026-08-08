@@ -254,9 +254,9 @@ label.fld{display:block;margin:12px 0 4px;color:var(--gold);font-family:'IM Fell
   display:inline-block;padding:2px 10px;font-size:.72rem;letter-spacing:.12em;
   font-family:'IM Fell English SC',serif;text-transform:uppercase;border-radius:2px;color:#f0e6d0;
 }
-.tone.Obsession{background:var(--tone-obsession)}
-.tone.Guilt{background:var(--tone-guilt)}
-.tone.Dread{background:var(--tone-dread)}
+.tone.Job{background:var(--tone-obsession)}
+.tone.Crew{background:var(--tone-guilt)}
+.tone.Ruin{background:var(--tone-dread)}
 .tone.count{min-width:34px;text-align:center}
 
 /* ---------- archetype roster (two-sided, flippable) ---------- */
@@ -803,3 +803,54 @@ label.fld{display:block;margin:12px 0 4px;color:var(--gold);font-family:'IM Fell
   .lobby-incident{grid-template-columns:82px minmax(0,1fr)}
   .lobby-incident-art{width:82px}
 }
+
+/* ---------- Realms & Ruin visual pass ---------- */
+:root{
+  --bg:#080611;
+  --bg2:#120d1f;
+  --woods:#0b0813;
+  --paper:#eadfc4;
+  --paper2:#d8c59c;
+  --ink:#211827;
+  --ink-soft:#574762;
+  --blood:#8e2937;
+  --blood-bright:#c04a4d;
+  --gold:#d5a552;
+  --gold-soft:#8f6b36;
+  --moon:#d8d0e8;
+  --tone-obsession:#a36a27;
+  --tone-guilt:#8e2937;
+  --tone-dread:#5c4386;
+}
+body{
+  background:
+    radial-gradient(ellipse 60% 34% at 50% -5%,rgba(152,93,214,.2),transparent 68%),
+    radial-gradient(ellipse 70% 42% at 8% 100%,rgba(193,111,34,.16),transparent 70%),
+    linear-gradient(180deg,#090611 0%,#110b1c 55%,#07050c 100%);
+}
+body::after{display:none}
+.wrap{max-width:1160px;padding-bottom:72px}
+#topbar{background:rgba(8,6,17,.94);border-bottom-color:rgba(213,165,82,.5);backdrop-filter:blur(12px)}
+#topbar .tb-title{color:#e6bd6a}
+button{border-radius:6px;border-color:rgba(213,165,82,.65);background:linear-gradient(180deg,#302038,#171021);box-shadow:inset 0 1px rgba(255,255,255,.08)}
+button.primary{background:linear-gradient(180deg,#8d5527,#51272b);border-color:#e5b15c;color:#fff1cf}
+button.ghost{background:rgba(17,11,28,.65)}
+button:hover{box-shadow:0 0 22px rgba(191,132,52,.3);transform:translateY(-1px)}
+.panel{background:linear-gradient(145deg,rgba(30,19,47,.84),rgba(12,8,21,.9));border-color:rgba(213,165,82,.35);border-radius:10px;box-shadow:0 14px 35px rgba(0,0,0,.25)}
+.masthead{padding-top:56px}
+.masthead h1{color:#f0d99d;text-shadow:0 0 25px rgba(155,92,220,.4),0 0 55px rgba(213,165,82,.15)}
+.masthead .m-over{color:#c04a4d}
+.card{border-color:#846b43;outline-color:rgba(213,165,82,.5);border-radius:8px;background:linear-gradient(145deg,rgba(255,250,235,.56),rgba(224,198,148,.9) 60%,#c4a875);box-shadow:0 12px 25px rgba(0,0,0,.48)}
+.card .c-kicker{color:#8e2937}
+.card.omen{background:linear-gradient(145deg,#3a2750,#171025);border-color:#8963ad;outline-color:#8963ad}
+.hookcard{border-radius:10px;background:linear-gradient(145deg,rgba(42,25,61,.9),rgba(13,8,22,.94));border-color:rgba(213,165,82,.58)}
+.hookcard h3{color:#f0d99d}
+.arch{border-radius:9px;background:linear-gradient(145deg,rgba(36,23,54,.78),rgba(13,9,22,.85));border-color:rgba(213,165,82,.38)}
+.arch.flipped{border-color:#c04a4d}
+.scene-tracker{border-radius:12px;background:radial-gradient(ellipse 60% 80% at 12% 100%,rgba(193,111,34,.2),transparent 70%),linear-gradient(145deg,rgba(23,13,38,.98),rgba(8,6,15,.98));border-color:rgba(213,165,82,.48)}
+.game-art{border-radius:8px;background:radial-gradient(circle at 50% 36%,rgba(213,165,82,.24),transparent 38%),linear-gradient(145deg,#2c1942,#090711)}
+.art-style-choice{border-radius:9px;background:rgba(15,9,26,.72)}
+.ggrid{gap:18px}
+.gtile-media,.gdetail-media{border-radius:9px;border-color:rgba(213,165,82,.7);background:linear-gradient(145deg,#eadfc4,#b8935a)}
+.gtile-cap{color:#e4d4ae}
+.tone{border-radius:999px;font-size:.68rem}
