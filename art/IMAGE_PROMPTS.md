@@ -11,8 +11,9 @@ them side by side once the files are in place.
 
 - **Style A — Dungeon Oil.** Torch-amber and deep-violet oil painting,
   ancient dwarven masonry, brass mechanisms, and expressive adventurers.
-- **Style B — Vault Woodcut.** High-contrast black-and-ivory engraving,
-  tactile cross-hatching, with a single ember-red or eerie-green accent.
+- **Style B — Vault Woodcut.** Abstract church-carving relief: broad
+  black-and-ivory shapes, simplified figures, sparse cross-hatching, and a
+  single ember-red or eerie-green accent.
 
 ## File naming & folder convention
 
