@@ -92,6 +92,22 @@ def run() -> None:
                 raise
             assert page.locator("#scr-title.active").count() == 1
 
+            # Tabletop reimagining prototype: reachable from the title page,
+            # playable as a focused scene, and safe at a narrow viewport.
+            page.get_by_role(
+                "link", name="Try the Tabletop Prototype", exact=True
+            ).click()
+            page.wait_for_url("**/tabletop-prototype.html")
+            assert page.get_by_role("heading", name="The Bell Beneath the Mire").count() == 1
+            assert page.get_by_text("The party reaches a half-sunken chapel", exact=False).count() == 1
+            page.get_by_role("button", name="Lore", exact=True).click()
+            page.get_by_role("button", name="Roll the d20", exact=True).click()
+            assert page.locator("#roll-result").inner_text().startswith("d20:")
+            assert page.locator("#scene-log").inner_text().count("The Bell Beneath the Mire") == 1
+            assert page.locator("#threat-track").get_attribute("aria-valuenow") is not None
+            assert_no_mobile_overflow(page)
+            page.goto(base, wait_until="domcontentloaded")
+
             # Solo setup through the first act hub.
             page.get_by_role(
                 "button", name="Enter the Under-Vaults", exact=True

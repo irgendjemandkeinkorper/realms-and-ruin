@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabletop Prototype — Realms &amp; Ruin</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/tabletop-prototype.css">
+</head>
+<body>
+<main class="wrap prototype-shell">
+  <a class="back-link" href="index.html">← Return to Realms &amp; Ruin</a>
+  <header class="prototype-hero">
+    <p class="sc eyebrow">A playable mechanics study</p>
+    <h1>Tabletop Reimagining</h1>
+    <p class="prototype-lede">A collaborative, lightly guided dark-fantasy scene using d20 intent checks, shared pressure, and a living Dossier.</p>
+    <div class="ornament">❦ ✦ ❦</div>
+    <div class="prototype-meta" aria-label="Prototype details">
+      <span>3–5 players</span><span>20–30 minutes</span><span>One rotating Guide</span>
+    </div>
+  </header>
+
+  <section class="prototype-grid" aria-label="Scene prototype">
+    <article class="scene-board panel">
+      <div class="scene-kicker"><span class="sc">Act I · The Descent</span><span class="tone-badge tone-dread">DREAD</span></div>
+      <h2>The Bell Beneath the Mire</h2>
+      <p class="scene-intro">The party reaches a half-sunken chapel at the edge of the Mire. Beneath the water, a bell rings once every few minutes. Each ring causes someone in the nearby village to forget a loved one's name.</p>
+      <div class="danger-callout">
+        <strong>Immediate danger</strong>
+        <p>The chapel floor is collapsing. A trapped villager is alive in the bell chamber, but the only safe path runs through a flooded crypt marked with the party's own names.</p>
+      </div>
+      <div class="scene-intents">
+        <h3>Choose your intent</h3>
+        <div class="intent-list">
+          <button class="intent-button" data-intent="Save the villager">Save the villager</button>
+          <button class="intent-button" data-intent="Secure the bell">Secure the bell</button>
+          <button class="intent-button" data-intent="Learn what is beneath the chapel">Learn what is beneath the chapel</button>
+          <button class="intent-button" data-intent="Protect the village from the next bell ring">Protect the village from the next bell ring</button>
+        </div>
+      </div>
+    </article>
+
+    <aside class="prototype-sidebar">
+      <section class="panel action-panel">
+        <div class="panel-heading"><h2>Your approach</h2><span id="selected-intent" class="muted">Choose an intent first</span></div>
+        <div class="approach-grid" role="group" aria-label="Choose an approach">
+          <button class="approach-button" data-attribute="Might" data-modifier="2"><strong>Might</strong><span>Force, endurance</span><b>+2</b></button>
+          <button class="approach-button" data-attribute="Guile" data-modifier="1"><strong>Guile</strong><span>Stealth, precision</span><b>+1</b></button>
+          <button class="approach-button" data-attribute="Will" data-modifier="0"><strong>Will</strong><span>Courage, empathy</span><b>+0</b></button>
+          <button class="approach-button" data-attribute="Lore" data-modifier="-1"><strong>Lore</strong><span>Ritual, investigation</span><b>-1</b></button>
+        </div>
+        <div class="roll-wrap">
+          <button class="primary roll-button" id="roll-button" disabled>Roll the d20</button>
+          <p class="small muted" id="roll-hint">Select an intent and approach to resolve the scene.</p>
+          <output id="roll-result" class="roll-result" aria-live="polite">Awaiting your action.</output>
+        </div>
+      </section>
+
+      <section class="panel tracks-panel" aria-labelledby="tracks-title">
+        <div class="panel-heading"><h2 id="tracks-title">Shared pressure</h2><span class="small muted">The table carries it together</span></div>
+        <div class="track-row"><span>Job</span><div class="track" aria-label="Job progress"><span id="job-track" style="width:16%"></span></div><b id="job-value">1/6</b></div>
+        <div class="track-row"><span>Crew</span><div class="track" aria-label="Crew progress"><span id="crew-track" class="crew-fill" style="width:16%"></span></div><b id="crew-value">1/6</b></div>
+        <div class="track-row"><span>Threat</span><div id="threat-track" class="track threat-track" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" aria-label="Threat level"><span id="threat-fill" style="width:0%"></span></div><b id="threat-value">0/6</b></div>
+      </section>
+
+      <section class="panel dossier-panel" aria-labelledby="dossier-title">
+        <div class="panel-heading"><h2 id="dossier-title">The Dossier</h2><span class="small muted">Record what changed</span></div>
+        <p id="scene-log" class="dossier-entry">No action resolved yet. The chapel waits beneath the water.</p>
+      </section>
+    </aside>
+  </section>
+
+  <section class="rules-strip panel">
+    <h2>How this becomes a story</h2>
+    <div class="rules-columns">
+      <div><span class="rule-number">01</span><strong>Intent</strong><p>Say what your character is trying to accomplish.</p></div>
+      <div><span class="rule-number">02</span><strong>Roll</strong><p>Roll d20 + the approach that fits your action.</p></div>
+      <div><span class="rule-number">03</span><strong>Consequence</strong><p>Success moves the mission; setbacks move the danger.</p></div>
+    </div>
+  </section>
+</main>
+<script type="module" src="js/tabletop-prototype.js"></script>
+</body>
+</html>
