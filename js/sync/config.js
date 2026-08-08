@@ -3,11 +3,11 @@
 // firestore.rules (see repo root), not in hiding this key.
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional.
 export const firebaseConfig = {
-  apiKey: "AIzaSyDc9WhuJd5kgPcDNPH_ckkvodZMCvU7Ozw",
-  authDomain: "realms-and-ruin-vale.firebaseapp.com",
-  projectId: "realms-and-ruin-vale",
-  storageBucket: "realms-and-ruin-vale.firebasestorage.app",
-  messagingSenderId: "684787374704",
-  appId: "1:684787374704:web:5f10d503263715d45b32b5",
-  measurementId: "G-38CMXX3RC8"
+  apiKey: "AIzaSyCeVzYnXCSS0-TQxf0jTSxvV3onUrko5zQ",
+  authDomain: "rememberedelms.firebaseapp.com",
+  projectId: "rememberedelms",
+  storageBucket: "rememberedelms.firebasestorage.app",
+  messagingSenderId: "549075539098",
+  appId: "1:549075539098:web:7588652355e2dfe9e33b23",
+  measurementId: "G-956JBKSPQT"
 };
