@@ -142,7 +142,7 @@ def run() -> None:
             ).click()
             page.wait_for_selector("#overlay[style*='block']")
             tile = page.locator(".gcat-archetypes .gtile").first
-            assert page.locator(".gcat-archetypes .gtile").count() == 6
+            assert page.locator(".gcat-archetypes .gtile").count() == 12
             quote = tile.locator("[data-gallery-side-quote]")
             front_quote = quote.inner_text()
             assert tile.locator("[data-gallery-side-label]").inner_text() == "Torchlit"

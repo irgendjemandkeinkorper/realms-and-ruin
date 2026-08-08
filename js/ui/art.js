@@ -36,7 +36,31 @@ const READY_ART = new Set([
   'painterly/victims/clockwork-heart-mourning-v1.png',
   'painterly/victims/clockwork-heart-die-nacht-v1.png',
   'painterly/victims/nameless-fragment-mourning-v1.png',
-  'painterly/victims/nameless-fragment-die-nacht-v1.png'
+  'painterly/victims/nameless-fragment-die-nacht-v1.png',
+  'tarot/archetypes/gravebound-knight-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/gravebound-knight-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/blood-ledger-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/blood-ledger-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/feral-hexblade-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/feral-hexblade-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/plague-alchemist-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/plague-alchemist-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/masked-usurper-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/masked-usurper-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/void-shepherd-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/void-shepherd-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/oathbound-shield-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/oathbound-shield-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/rift-scholar-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/rift-scholar-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/delver-rogue-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/delver-rogue-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/ashen-acolyte-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/ashen-acolyte-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/beastwarden-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/beastwarden-guttered-vault-woodcut-v1.png',
+  'tarot/archetypes/clockwork-tinkerer-candlelit-vault-woodcut-v1.png',
+  'tarot/archetypes/clockwork-tinkerer-guttered-vault-woodcut-v1.png'
 ]);
 
 export function artAssetAvailable(style, category, key){

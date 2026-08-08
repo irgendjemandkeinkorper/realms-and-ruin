@@ -22,6 +22,24 @@ export const CARD_ARCHETYPES = [
   card('clockwork-tinkerer','The Clockwork Tinkerer',
     face('candlelit','Repairing','A tinkerer rebuilds a tiny guardian from brass scraps while the ruin’s gears turn overhead.','Give me one minute and a worse idea.'),
     face('guttered','Rewriting','A crown of gears opens around the tinkerer’s head as every vault guardian turns in unison.','The machine remembers who taught it fear.'))
+  ,card('gravebound-knight','The Gravebound Knight',
+    face('candlelit','Vigilant','A black-armored knight keeps watch over a wounded companion while pale hands claw up through the floor.','The dead keep better faith than kings.'),
+    face('guttered','Risen','The knight’s visor opens on a face that is not quite alive as a legion gathers behind the shield.','Stand. The march is not over.'))
+  ,card('blood-ledger','The Blood Ledger',
+    face('candlelit','Negotiating','A pact-broker writes names into a leather ledger while a candle burns with blood-red wax.','Every promise has a number.'),
+    face('guttered','Collected','The ledger hangs open above a circle of bound shadows, each signature dripping from the page.','You already agreed. You simply forgot.'))
+  ,card('feral-hexblade','The Feral Hexblade',
+    face('candlelit','Sheathed','A scarred sellsword holds a whispering black blade low while an enemy lays down their weapon.','Mercy is a sharper test.'),
+    face('guttered','Unleashed','The sword drinks the torchlight as its wielder charges through a storm of spectral faces.','It remembers every throat.' ))
+  ,card('plague-alchemist','The Plague Alchemist',
+    face('candlelit','Measured','A masked alchemist offers a silver vial to a fevered adventurer beside a careful row of bottles.','The dose is not the cure.'),
+    face('guttered','Contagion','Green vapor blooms from the alchemist’s gloves as figures collapse behind a sealed door.','The vault will carry it for me.'))
+  ,card('masked-usurper','The Masked Usurper',
+    face('candlelit','Claimant','A masked noble stands before a sealed throne, offering a gauntlet to the expedition instead of a hand.','Kneel now, and no one needs to bleed.'),
+    face('guttered','Crowned','The mask splits into a crown of iron teeth while every statue in the chamber turns to face its ruler.','The throne was waiting for my name.'))
+  ,card('void-shepherd','The Void Shepherd',
+    face('candlelit','Binding','A robed warlock holds a chain of starlight around a small rift while the Crew passes behind them.','The dark obeys whoever names it.'),
+    face('guttered','Unchained','A towering silhouette leans through the opened rift as the shepherd releases the last link.','Choose who the abyss remembers.'))
 ];
 
 export const CARD_VICTIMS = [
@@ -54,6 +72,6 @@ export function archetypeCardForRole(role){
 }
 export function pairedCardStem(style,item,sideIndex){
   const faceId=item.faces[sideIndex]?.id || item.faces[0].id;
-  const suffix=style==='tarot' ? '-tarot-stained-glass-v1' : '-v1';
+  const suffix=style==='tarot' ? '-vault-woodcut-v1' : '-v1';
   return `${item.slug}-${faceId}${suffix}`;
 }

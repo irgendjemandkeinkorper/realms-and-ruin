@@ -21,4 +21,16 @@ export const ARCHETYPES = [
     {cond:'If you spare a creature that could still threaten the expedition…',tone:'Crew'}, {cond:'If you turn a bound beast against its former master…',tone:'Ruin'}]},
   {role:'The Clockwork Tinkerer', flavor:'An artificer carrying a hand-sized workshop, three bad ideas, and one device that should not function.', setup:questions, sides:[
     {cond:'If you repair a ward instead of harvesting its mechanism…',tone:'Crew'}, {cond:'If you reprogram a guardian to obey only you…',tone:'Job'}]}
+  ,{role:'The Gravebound Knight', flavor:'A disgraced champion who believes the dead are the only comrades who never betray an order.', setup:questions, sides:[
+    {cond:'If you stand between a trapped companion and the thing in the dark…',tone:'Crew'}, {cond:'If you raise the fallen to finish the march…',tone:'Ruin'}]}
+  ,{role:'The Blood Ledger', flavor:'A pact-broker who records every favor in their own blood and collects with interest.', setup:questions, sides:[
+    {cond:'If you forgive a debt that could buy the Crew’s escape…',tone:'Crew'}, {cond:'If you trade a companion’s secret for the vault’s key…',tone:'Job'}]}
+  ,{role:'The Feral Hexblade', flavor:'A mercenary whose sentient sword has learned to whisper in the voices of everyone it has killed.', setup:questions, sides:[
+    {cond:'If you lower the blade when an enemy begs for mercy…',tone:'Crew'}, {cond:'If you feed the sword a living name to break the ward…',tone:'Ruin'}]}
+  ,{role:'The Plague Alchemist', flavor:'A masked apothecary who calls poison a cure whenever the patient is inconvenient.', setup:questions, sides:[
+    {cond:'If you spend your last antidote on another adventurer…',tone:'Crew'}, {cond:'If you dose the rival expedition before they reach the relic…',tone:'Job'}]}
+  ,{role:'The Masked Usurper', flavor:'A claimant to a dead throne who treats the Under-Vaults as a kingdom awaiting its proper ruler.', setup:questions, sides:[
+    {cond:'If you surrender authority to save the expedition…',tone:'Crew'}, {cond:'If you crown yourself with the relic’s power…',tone:'Ruin'}]}
+  ,{role:'The Void Shepherd', flavor:'A warlock who guides things from beyond the cracks and promises they will eat only the people who deserve it.', setup:questions, sides:[
+    {cond:'If you bind the horror to yourself so it cannot reach the Crew…',tone:'Crew'}, {cond:'If you open the final gate and let the dark choose who survives…',tone:'Ruin'}]}
 ];
