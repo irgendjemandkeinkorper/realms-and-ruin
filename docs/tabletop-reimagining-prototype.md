@@ -1,128 +1,89 @@
-# Tabletop Reimagining: Private Canon Prototype
+# Tabletop Reimagining: Cardplay Prototype
 
-## Purpose
+## Design boundary
 
-This reimagining keeps the base game's collaborative narrative-card structure. The dark-fantasy setting is an aesthetic and vocabulary layer; it does not turn the game into D&D or add dice, attributes, builds, combat rounds, or a permanent Guide.
+This is a narrative storytelling game with a dark-fantasy aesthetic. It is not D&D. The setting may use dungeons, bells, ruined chapels, Heroes, Omens, and Acts, but the mechanics remain the same family as Bleakwood Vale and Supe Pines:
 
-The prototype tests one distinct twist:
+- Hook/Case cards establish the situation.
+- Hero cards and setup questions make the cast specific.
+- Scene cards create the current moment.
+- Players contribute Scene or Omen cards.
+- Resolution turns the card combination into shared fiction.
+- Tone, Secrets, Acts, and the Dossier carry consequences forward.
 
-> Each storyteller privately decides what a Scene means. A Signal then reframes the Scene, and the table chooses which interpretation becomes shared canon.
+## The twist
 
-## What remains from the base game
+Each storyteller privately decides what their contributed card means. After all contributions are locked, an Omen is revealed to reframe the scene. The table then chooses one interpretation to become canon.
 
-- Case/Incident establishes the situation.
-- Heroes are shaped through setup questions.
-- Scene and Signal cards constrain collaborative fiction.
-- Players contribute, pass, reveal, and resolve.
-- Tone tracks shape the emotional direction.
-- Private Secrets create tension and delayed revelations.
-- Three acts provide escalation and pacing.
-- The Dossier records the story the table actually created.
+The twist lives inside the existing card pipeline; it does not replace card selection, contribution limits, or resolution.
 
-## Core loop
+## Prototype loop
 
-1. **Reveal the Scene.** Read a shared situation and its open question.
-2. **Interpret privately.** Each storyteller chooses or writes what they believe is happening.
-3. **Lock and pass.** The device or table keeps each interpretation hidden while the next storyteller contributes.
-4. **Reveal the Signal.** Introduce an omen, contradiction, or new fact that changes the meaning of the Scene.
-5. **Reveal the interpretations.** Read them together without allowing immediate revision.
-6. **Make canon.** Choose one interpretation, or combine two, as the fact future Scenes must respect.
-7. **Resolve the Scene.** Add the canon to the Dossier and update the relevant tone or act state.
+1. **Choose the Hook.** Select the Hook card that frames the problem.
+2. **Deal the Scene.** Show a small Scene deck and choose the current Scene card.
+3. **Open the contribution row.** Each storyteller privately chooses one Scene contribution or Omen contribution.
+4. **Write the reading.** Each storyteller adds one sentence explaining what their card means here.
+5. **Lock and pass.** Keep the card and sentence hidden until everyone has contributed.
+6. **Reveal the card stack.** Show Hook, Scene, all contributions, and the Signal Omen.
+7. **Make canon.** Choose one contribution reading as the fact the next Scene must respect.
+8. **Resolve and record.** Add the result to the Dossier, update tone, and continue the Act.
 
-The interesting tension is not whether someone rolled well. It is whether the table can accept a shared truth that was not their own preferred reading.
+## Prototype content
 
-## The unique twist: private interpretation versus shared canon
+### Hook
 
-The same Scene should support several plausible readings. Players are not trying to guess the designer's answer; they are trying to establish a direction they hope the table will adopt.
+**The Drowned Bell**
 
-Private interpretations can contain:
+Every evening, the bell beneath the Mire rings once. Each ring steals a villager's memory of someone they love. Tonight, it rings beneath the old chapel.
 
-- what is actually happening;
-- who is responsible;
-- what the characters misunderstand;
-- what the scene is emotionally about; or
-- what future danger the table should notice.
+Question: *What is the bell asking the village to forget?*
 
-The Signal should not invalidate an interpretation. It should make more than one interpretation newly plausible.
+### Scene deck
 
-## Table rules
+- **The Bell Beneath the Mire:** the chapel floor gives way around a living villager.
+- **The Names in the Register:** someone has written the party into the village's death book.
+- **The Empty Bell Tower:** the bell is gone, but its sound is still coming from inside the walls.
 
-### Private phase
+### Contribution row
 
-Each player chooses one contribution and writes one sentence. Contributions are locked before anyone sees another player's answer.
+- **The Chapel Gives Way** — Scene contribution. Something trapped below has room to breathe.
+- **The Bell's Debt** — Omen contribution. A name is a promise, and promises can be collected.
 
-### Signal phase
+### Signal Omen
 
-Reveal one Signal card. The Signal should add pressure, reverse an assumption, or expose a relationship. It must be usable as a lens over every private interpretation.
+**The Bell Rings Your Name**
 
-### Canon phase
+Every storyteller hears their own name spoken from beneath the water.
 
-The table chooses one interpretation by open discussion, consent, or a vote. The chosen interpretation becomes fact. Unchosen interpretations are not discarded: they can become rumors, false beliefs, future Secrets, or Threat material.
+The Signal changes the meaning of every card without supplying a correct answer.
 
-### Dossier phase
+## What becomes canon
 
-Record:
+The selected interpretation becomes a binding fact. Unselected interpretations remain usable as:
 
-> We decided that __________, but the Signal made us question __________.
+- rumors;
+- false beliefs;
+- future Secrets;
+- later Omens; or
+- the hidden truth behind an Act close.
 
-The sentence is binding story material for the next Scene.
+This prevents contributions from feeling wasted while still making the canon choice matter.
 
-## Scene prototype: The Bell Beneath the Mire
+## Dossier entry
 
-### Scene
+Record the chosen reading as a concrete story fact:
 
-The party reaches a half-sunken chapel at the edge of the Mire. Beneath the water, a bell rings once every few minutes. Each ring causes someone in the nearby village to forget a loved one's name.
+> At the chapel, we decided that __________. The bell made us question __________.
 
-### Open question
+The next Scene must build from the first blank. The second blank becomes pressure the table can revisit.
 
-What does the bell really want, and what will the party be willing to let the village forget?
+## Playtest success criteria
 
-### Possible private interpretations
+The prototype works if:
 
-- The bell is protecting the village from something worse.
-- The bell is bargaining for the names of people who betrayed the chapel.
-- The bell is not the source of the forgetting; it is warning the village.
-- The bell remembers the party and is calling one of them home.
-
-### Signal
-
-> The bell rings again. This time, every storyteller hears their own name spoken from beneath the water.
-
-The Signal makes the interpretations personal without deciding which one is true.
-
-### Canon examples
-
-If the table chooses “the bell is warning the village,” the next Scene must treat the bell as an imperfect ally or warning system. If it chooses “the bell remembers the party,” the next Scene must treat at least one Hero's history as connected to the chapel.
-
-## How Secrets interact with the twist
-
-Secrets should complicate canon rather than simply reveal a hidden answer.
-
-A Secret may:
-
-- make one interpretation more credible;
-- cause a player to advocate against their own private interpretation;
-- reveal that a chosen canon is incomplete;
-- turn an unchosen interpretation into a dangerous rumor; or
-- force the table to revisit a previous canon at an Act close.
-
-The strongest Secret is not “I know the truth.” It is “I know why this truth is dangerous for us.”
-
-## Act structure
-
-- **Act I — The Descent:** establish the Case and teach the private-canon loop.
-- **Act II — The Fracture:** introduce Signals that make previous canon contradictory or costly.
-- **Act III — The Price:** force the table to choose which canon survives when two beloved truths cannot coexist.
-
-At the finale, compare the group's established tone, used Secrets, and Dossier facts. Endings should feel like consequences of accepted canon rather than a separate puzzle solution.
-
-## Prototype success criteria
-
-The prototype succeeds if:
-
-1. Every player creates a meaningful interpretation before seeing anyone else's.
-2. The Signal creates multiple plausible readings instead of revealing a correct answer.
-3. The canon choice changes what the next Scene must mean.
-4. An unchosen interpretation remains useful as future story material.
-5. Players experience tension from shared authorship, not competition or hidden scoring.
-6. The procedure works without dice, character builds, or a dedicated narrator.
+1. Players use the same Hook and Scene card but produce different readings.
+2. The Omen makes all readings newly interesting.
+3. The card stack is easy to understand at a glance.
+4. The canon choice changes the fiction rather than merely scoring it.
+5. Unchosen readings remain useful material.
+6. The experience feels like Bleakwood/Supe Pines cardplay with a fresh twist, not like a disguised RPG.

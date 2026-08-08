@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tabletop Prototype — Realms &amp; Ruin</title>
+<title>Cardplay Prototype — Realms &amp; Ruin</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/tabletop-prototype.css">
 </head>
@@ -11,75 +11,81 @@
 <main class="wrap prototype-shell">
   <a class="back-link" href="index.html">← Return to Realms &amp; Ruin</a>
   <header class="prototype-hero">
-    <p class="sc eyebrow">A collaborative story prototype</p>
-    <h1>The Story We Bury</h1>
-    <p class="prototype-lede">Each storyteller privately decides what the scene means. Then the Signal is revealed, the interpretations collide, and the table chooses what becomes true.</p>
+    <p class="sc eyebrow">A cardplay mechanics prototype</p>
+    <h1>The Drowned Bell</h1>
+    <p class="prototype-lede">Choose a Hook, deal a Scene, contribute Scene or Omen cards, and decide together which private reading becomes part of the story.</p>
     <div class="ornament">❦ ✦ ❦</div>
-    <div class="prototype-meta" aria-label="Prototype details">
-      <span>3 storytellers</span><span>One shared canon</span><span>Three acts</span>
-    </div>
+    <nav class="phase-rail" aria-label="Story phases">
+      <span class="phase active" id="phase-hook">01 Hook</span><span class="phase" id="phase-heroes">02 Heroes</span><span class="phase" id="phase-scene">03 Scene</span><span class="phase" id="phase-resolve">04 Resolve</span>
+    </nav>
   </header>
 
-  <section class="prototype-grid" aria-label="Private interpretation prototype">
-    <article class="scene-board panel">
-      <div class="scene-kicker"><span class="sc">Act I · The Descent</span><span class="tone-badge tone-dread">DREAD</span></div>
-      <h2 id="scene-title">The Bell Beneath the Mire</h2>
-      <p class="scene-intro">The party reaches a half-sunken chapel at the edge of the Mire. Beneath the water, a bell rings once every few minutes. Each ring causes someone in the nearby village to forget a loved one's name.</p>
-      <div class="danger-callout">
-        <strong>The question before the table</strong>
-        <p>What does the bell really want, and what will the party be willing to let the village forget?</p>
-      </div>
-      <div class="canon-card">
-        <span class="sc">Current canon</span>
-        <p id="canon-text">Nothing has been agreed yet. The scene is still listening.</p>
-      </div>
-      <div class="scene-log-wrap">
-        <h3>Scene record</h3>
-        <p id="scene-log">The storytellers have not yet added their interpretations.</p>
-      </div>
-    </article>
+  <section class="prototype-grid" aria-label="Cardplay prototype">
+    <article class="table-board panel">
+      <div class="board-heading"><div><span class="sc">The Table</span><h2 id="board-title">Choose the Hook</h2></div><span class="act-badge">ACT I · THE DESCENT</span></div>
 
-    <aside class="prototype-sidebar">
-      <section class="panel story-panel" id="story-panel" aria-labelledby="story-panel-title">
-        <div class="panel-heading"><h2 id="story-panel-title">Private interpretation</h2><span id="phase-label" class="small muted">Storyteller 1 of 3</span></div>
-        <p id="phase-instruction" class="instruction">Choose what you believe is happening. The other storytellers should look away.</p>
-        <div class="interpretation-options" role="group" aria-label="Private interpretation choices">
-          <button class="interpretation-button" data-interpretation="Protect the forgotten names">Protect the forgotten names</button>
-          <button class="interpretation-button" data-interpretation="Break the bell's bargain">Break the bell's bargain</button>
-          <button class="interpretation-button" data-interpretation="Listen to what answers below">Listen to what answers below</button>
-          <button class="interpretation-button" data-interpretation="Leave the chapel untouched">Leave the chapel untouched</button>
-        </div>
-        <label class="note-label" for="private-note">Add one private sentence</label>
-        <textarea id="private-note" rows="3" placeholder="I think the bell is..." maxlength="180"></textarea>
-        <button class="primary action-button" id="lock-button" disabled>Lock interpretation</button>
-        <button class="primary action-button hidden" id="signal-button">Reveal the Signal</button>
-        <p id="privacy-note" class="small muted privacy-note">Once locked, this interpretation stays hidden until the Signal is revealed.</p>
+      <section id="hook-stage" class="stage">
+        <article class="game-card hook-card">
+          <div class="card-type">HOOK · THE INCIDENT</div><h3>The Drowned Bell</h3>
+          <p>Every evening, the bell beneath the Mire rings once. Each ring steals a villager's memory of someone they love. Tonight, it rings for the first time beneath the old chapel.</p>
+          <div class="card-question"><span class="sc">The question</span><strong>What is the bell asking the village to forget?</strong></div>
+          <button class="primary" id="hook-button">Choose this Hook</button>
+        </article>
       </section>
 
-      <section class="panel reveal-panel hidden" id="reveal-panel" aria-labelledby="reveal-title">
-        <div class="panel-heading"><h2 id="reveal-title">The Signal</h2><span class="tone-badge tone-guilt">GUILT</span></div>
-        <p class="signal-text">The bell rings again. This time, every storyteller hears their own name spoken from beneath the water.</p>
-        <p class="instruction">Reveal the private interpretations. Which one should become the next piece of shared truth?</p>
-        <div id="reveal-list" class="reveal-list"></div>
+      <section id="scene-stage" class="stage hidden">
+        <div class="table-section-heading"><h3>Scene deck</h3><span class="small muted">Choose one card to open the moment</span></div>
+        <div class="card-row scene-deck">
+          <button class="game-card selectable-card scene-card" data-scene="The Bell Beneath the Mire"><span class="card-type">SCENE · DREAD</span><strong>The Bell Beneath the Mire</strong><small>The chapel floor gives way around a living villager.</small><em>Play this Scene</em></button>
+          <button class="game-card selectable-card scene-card" data-scene="The Names in the Register"><span class="card-type">SCENE · GUILT</span><strong>The Names in the Register</strong><small>Someone has written the party into the village's death book.</small><em>Play this Scene</em></button>
+          <button class="game-card selectable-card scene-card" data-scene="The Empty Bell Tower"><span class="card-type">SCENE · FURY</span><strong>The Empty Bell Tower</strong><small>The bell is gone, but its sound is still coming from inside the walls.</small><em>Play this Scene</em></button>
+        </div>
+        <div id="active-scene" class="active-scene hidden"></div>
+        <div id="contribution-stage" class="hidden">
+          <div class="table-section-heading"><h3>Contribution row</h3><span id="storyteller-label" class="small muted">Storyteller One · 1 of 3</span></div>
+          <p id="contribution-instruction" class="instruction">Choose one Scene or Omen card privately. Add the meaning you want the table to notice.</p>
+          <div class="card-row contribution-row">
+            <button class="game-card selectable-card contribution-card" data-card="The Chapel Gives Way"><span class="card-type">SCENE CONTRIBUTION</span><strong>The Chapel Gives Way</strong><small>Something trapped below has room to breathe.</small></button>
+            <button class="game-card selectable-card contribution-card" data-card="The Bell's Debt"><span class="card-type omen-type">OMEN CONTRIBUTION</span><strong>The Bell's Debt</strong><small>A name is a promise, and promises can be collected.</small></button>
+          </div>
+          <label for="private-note" class="note-label">Private reading</label><textarea id="private-note" rows="2" maxlength="180" placeholder="I want the table to notice..."></textarea>
+          <button class="primary action-button" id="lock-button" disabled>Lock interpretation</button>
+          <p id="privacy-note" class="small muted privacy-note">Your card and reading stay hidden until the stack is revealed.</p>
+        </div>
+        <button class="primary action-button hidden" id="reveal-button">Reveal the card stack</button>
+      </section>
+
+      <section id="resolve-stage" class="stage hidden">
+        <div class="table-section-heading"><h3>Resolve the stack</h3><span class="small muted">Hook + Scene + contributions + Omen</span></div>
+        <div class="stack-row" id="stack-row"></div>
+        <article class="game-card omen-card"><span class="card-type omen-type">OMEN · THE SIGNAL</span><strong>The Bell Rings Your Name</strong><small>Every storyteller hears their own name spoken from beneath the water.</small></article>
+        <p class="instruction">The Signal changes the meaning of every card. Choose which reading becomes the next fact.</p>
+        <div id="canon-list" class="canon-list"></div>
         <button class="primary action-button" id="resolve-button" disabled>Resolve the scene</button>
       </section>
 
-      <section class="panel next-panel hidden" id="next-panel" aria-live="polite">
-        <div class="panel-heading"><h2>Canon established</h2><span class="tone-badge tone-dread">ACT I</span></div>
-        <p id="canon-summary"></p>
-        <p class="small muted">The chosen interpretation is now a fact. The next Scene must build on it, even if it was not your own.</p>
-        <a class="prototype-link" href="tabletop-prototype.html">Play the scene again</a>
+      <section id="complete-stage" class="stage hidden">
+        <div class="complete-mark">✦</div><h2>The canon is set</h2>
+        <p id="canon-summary"></p><p class="muted">The next Scene must build from this truth. The other readings remain available as rumors, Secrets, or future Omens.</p>
+        <a class="prototype-link" href="tabletop-prototype.html">Deal another scene</a>
+      </section>
+    </article>
+
+    <aside class="prototype-sidebar">
+      <section class="panel hand-panel">
+        <div class="panel-heading"><h2>At the table</h2><span class="small muted">Local hotseat</span></div>
+        <div class="hero-strip"><span class="hero-chip">The Ash-Watcher</span><span class="hero-chip">The Oathbreaker</span><span class="hero-chip">The Bell-Keeper</span></div>
+        <p class="small muted">Heroes are not builds here. They are lenses: each player's answers and private cards make the shared story specific.</p>
+      </section>
+      <section class="panel dossier-panel">
+        <div class="panel-heading"><h2>The Dossier</h2><span class="small muted">What became true</span></div>
+        <p id="scene-log" class="dossier-entry">The Hook is waiting for a Scene and its first interpretation.</p>
+      </section>
+      <section class="panel twist-panel">
+        <div class="panel-heading"><h2>The twist</h2><span class="tone-badge">PRIVATE → SHARED</span></div>
+        <ol><li>Choose a card from the current row.</li><li>Write what it means to you.</li><li>Reveal everything after the Omen.</li><li>Make one reading canon.</li></ol>
       </section>
     </aside>
-  </section>
-
-  <section class="rules-strip panel">
-    <h2>The twist</h2>
-    <div class="rules-columns">
-      <div><span class="rule-number">01</span><strong>Interpret privately</strong><p>Everyone receives the same scene but forms a separate reading of it.</p></div>
-      <div><span class="rule-number">02</span><strong>Reveal the Signal</strong><p>A new card changes how every interpretation might be understood.</p></div>
-      <div><span class="rule-number">03</span><strong>Make canon together</strong><p>The table chooses one truth, and everyone must play forward from it.</p></div>
-    </div>
   </section>
 </main>
 <script type="module" src="js/tabletop-prototype.js"></script>

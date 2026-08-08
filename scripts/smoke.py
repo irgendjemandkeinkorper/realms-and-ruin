@@ -98,19 +98,21 @@ def run() -> None:
                 "link", name="Try the Tabletop Prototype", exact=True
             ).click()
             page.wait_for_url("**/tabletop-prototype.html")
-            assert page.get_by_role("heading", name="The Bell Beneath the Mire").count() == 1
-            assert page.get_by_text("private interpretation", exact=False).count() >= 1
+            assert page.get_by_role("heading", name="The Drowned Bell").count() == 1
+            assert page.get_by_text("Scene deck", exact=False).count() >= 1
+            page.get_by_role("button", name="Choose this Hook", exact=True).click()
+            page.get_by_role("button", name="Play this Scene", exact=True).click()
             for player in range(3):
-                page.get_by_role("button", name="Protect the forgotten names", exact=True).click()
+                page.get_by_role("button", name="The Bell's Debt", exact=True).click()
                 page.fill("#private-note", f"Smoke interpretation {player + 1}")
                 page.get_by_role("button", name="Lock interpretation", exact=True).click()
                 if player < 2:
                     page.get_by_role("button", name="Pass to the next storyteller", exact=True).click()
-            page.get_by_role("button", name="Reveal the Signal", exact=True).click()
+            page.get_by_role("button", name="Reveal the card stack", exact=True).click()
             page.get_by_role("button", name="Make this canon", exact=True).first.click()
             page.get_by_role("button", name="Resolve the scene", exact=True).click()
             assert "Smoke interpretation" in page.locator("#scene-log").inner_text()
-            assert page.locator("#scene-log").inner_text().count("The Bell Beneath the Mire") == 1
+            assert page.locator("#scene-log").inner_text().count("The Drowned Bell") == 1
             assert_no_mobile_overflow(page)
             page.goto(base, wait_until="domcontentloaded")
 

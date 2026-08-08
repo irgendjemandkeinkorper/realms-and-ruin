@@ -1,7 +1,8 @@
 const state = {
+  scene: '',
+  contribution: '',
   interpretations: [],
   activePlayer: 0,
-  selected: '',
   canonIndex: -1,
 };
 
@@ -9,45 +10,68 @@ const $ = (selector) => document.querySelector(selector);
 const all = (selector) => [...document.querySelectorAll(selector)];
 const names = ['Storyteller One', 'Storyteller Two', 'Storyteller Three'];
 
-function updateLockState() {
-  $('#lock-button').disabled = !(state.selected && $('#private-note').value.trim());
+function setPhase(current) {
+  const phases = ['hook', 'heroes', 'scene', 'resolve'];
+  phases.forEach((phase, index) => {
+    const element = $(`#phase-${phase}`);
+    element.classList.toggle('active', phase === current);
+    element.classList.toggle('done', index < phases.indexOf(current));
+  });
 }
 
-function selectInterpretation(button) {
-  state.selected = button.dataset.interpretation;
-  all('.interpretation-button').forEach((item) => {
+function updateLockState() {
+  $('#lock-button').disabled = !(state.contribution && $('#private-note').value.trim());
+}
+
+function selectCard(button, selector) {
+  state[selector] = button.dataset.card || button.dataset.scene;
+  all(`.${selector === 'scene' ? 'scene-card' : 'contribution-card'}`).forEach((item) => {
     const selected = item === button;
     item.classList.toggle('selected', selected);
     item.setAttribute('aria-pressed', selected ? 'true' : 'false');
   });
-  updateLockState();
+  if (selector === 'contribution') updateLockState();
+}
+
+function chooseHook() {
+  $('#hook-stage').classList.add('hidden');
+  $('#scene-stage').classList.remove('hidden');
+  $('#board-title').textContent = 'Deal the Scene';
+  $('#scene-log').textContent = 'The Drowned Bell is chosen. The Scene deck is ready.';
+  setPhase('scene');
+}
+
+function chooseScene(button) {
+  selectCard(button, 'scene');
+  $('#active-scene').textContent = `${state.scene}: the shared moment is open. Now each storyteller adds one private reading.`;
+  $('#active-scene').classList.remove('hidden');
+  $('#contribution-stage').classList.remove('hidden');
+  $('#board-title').textContent = state.scene;
+  $('#scene-log').textContent = `${state.scene} is on the table. Contributions are still hidden.`;
+  button.closest('.scene-deck').querySelectorAll('button').forEach((item) => { item.disabled = true; });
 }
 
 function showActiveStoryteller() {
-  $('#phase-label').textContent = `${names[state.activePlayer]} · ${state.activePlayer + 1} of 3`;
-  $('#phase-instruction').textContent = state.activePlayer === 0
-    ? 'Choose what you believe is happening. The other storytellers should look away.'
-    : 'Pass the screen to the next storyteller. Keep the previous interpretations hidden.';
+  $('#storyteller-label').textContent = `${names[state.activePlayer]} · ${state.activePlayer + 1} of 3`;
+  $('#contribution-instruction').textContent = state.activePlayer === 0
+    ? 'Choose one Scene or Omen card privately. Add the meaning you want the table to notice.'
+    : 'Pass the screen to the next storyteller. Keep the previous card choices and readings hidden.';
   $('#private-note').value = '';
-  state.selected = '';
-  all('.interpretation-button').forEach((item) => {
-    item.classList.remove('selected');
-    item.setAttribute('aria-pressed', 'false');
-  });
+  state.contribution = '';
+  all('.contribution-card').forEach((item) => { item.classList.remove('selected'); item.setAttribute('aria-pressed', 'false'); });
   updateLockState();
 }
 
-function lockInterpretation() {
+function lockContribution() {
   state.interpretations.push({
     player: names[state.activePlayer],
-    interpretation: state.selected,
+    card: state.contribution,
     note: $('#private-note').value.trim(),
   });
-  $('#privacy-note').textContent = 'Locked. Pass the screen without discussing your interpretation.';
   $('#lock-button').disabled = true;
+  $('#privacy-note').textContent = 'Locked. Pass the screen without discussing your card or reading.';
   if (state.activePlayer < names.length - 1) {
     $('#lock-button').classList.add('hidden');
-    $('#pass-button')?.remove();
     const pass = document.createElement('button');
     pass.className = 'primary action-button';
     pass.id = 'pass-button';
@@ -60,51 +84,59 @@ function lockInterpretation() {
     });
     $('#lock-button').after(pass);
   } else {
-    $('#lock-button').textContent = 'All interpretations locked';
     $('#lock-button').classList.add('hidden');
-    $('#signal-button').classList.remove('hidden');
-    $('#privacy-note').textContent = 'Everyone has committed. Reveal the Signal when the table is ready.';
+    $('#reveal-button').classList.remove('hidden');
+    $('#privacy-note').textContent = 'All contributions are locked. Reveal the stack when the table is ready.';
   }
 }
 
-function revealSignal() {
-  $('#story-panel').classList.add('hidden');
-  $('#reveal-panel').classList.remove('hidden');
-  renderReveals();
+function renderStack() {
+  const row = $('#stack-row');
+  row.innerHTML = `<div class="game-card stack-card"><span class="card-type">HOOK</span><strong>The Drowned Bell</strong></div><div class="game-card stack-card"><span class="card-type">SCENE</span><strong>${state.scene}</strong></div>`;
+  state.interpretations.forEach((entry) => {
+    row.insertAdjacentHTML('beforeend', `<div class="game-card stack-card"><span class="card-type">${entry.card.includes('Omen') || entry.card.includes('Debt') ? 'OMEN' : 'SCENE'}</span><strong>${entry.card}</strong></div>`);
+  });
 }
 
-function renderReveals() {
-  const list = $('#reveal-list');
+function revealStack() {
+  $('#scene-stage').classList.add('hidden');
+  $('#resolve-stage').classList.remove('hidden');
+  $('#board-title').textContent = 'Resolve the Card Stack';
+  renderStack();
+  const list = $('#canon-list');
   list.innerHTML = '';
   state.interpretations.forEach((entry, index) => {
-    const card = document.createElement('article');
-    card.className = 'reveal-card';
-    card.innerHTML = `<h3>${entry.player}</h3><p><strong>${entry.interpretation}</strong> — ${entry.note}</p>`;
-    const choose = document.createElement('button');
-    choose.className = 'ghost canon-button';
-    choose.textContent = 'Make this canon';
-    choose.addEventListener('click', () => {
+    const item = document.createElement('article');
+    item.className = 'canon-entry';
+    item.innerHTML = `<p><strong>${entry.player}</strong> played <em>${entry.card}</em>: ${entry.note}</p>`;
+    const button = document.createElement('button');
+    button.className = 'ghost canon-button';
+    button.textContent = 'Make this canon';
+    button.addEventListener('click', () => {
       state.canonIndex = index;
-      all('.reveal-card').forEach((item, itemIndex) => item.classList.toggle('selected', itemIndex === index));
+      all('.canon-entry').forEach((card, cardIndex) => card.classList.toggle('selected', cardIndex === index));
       $('#resolve-button').disabled = false;
     });
-    card.append(choose);
-    list.append(card);
+    item.append(button);
+    list.append(item);
   });
+  setPhase('resolve');
 }
 
 function resolveScene() {
   const canon = state.interpretations[state.canonIndex];
-  $('#reveal-panel').classList.add('hidden');
-  $('#next-panel').classList.remove('hidden');
-  $('#canon-text').textContent = `${canon.interpretation}: ${canon.note}`;
-  $('#canon-summary').textContent = `The table made ${canon.player}'s interpretation true: ${canon.interpretation.toLowerCase()}.`;
-  $('#scene-log').textContent = `The Bell Beneath the Mire: ${canon.note}`;
+  $('#resolve-stage').classList.add('hidden');
+  $('#complete-stage').classList.remove('hidden');
+  $('#board-title').textContent = 'The Dossier Remembers';
+  $('#canon-summary').textContent = `The table made ${canon.player}'s reading true: ${canon.note}`;
+  $('#scene-log').textContent = `${state.scene}: ${canon.note}`;
+  setPhase('resolve');
 }
 
-all('.interpretation-button').forEach((button) => button.addEventListener('click', () => selectInterpretation(button)));
+$('#hook-button').addEventListener('click', chooseHook);
+all('.scene-card').forEach((button) => button.addEventListener('click', () => chooseScene(button)));
+all('.contribution-card').forEach((button) => button.addEventListener('click', () => selectCard(button, 'contribution')));
 $('#private-note').addEventListener('input', updateLockState);
-$('#lock-button').addEventListener('click', lockInterpretation);
-$('#signal-button').addEventListener('click', revealSignal);
+$('#lock-button').addEventListener('click', lockContribution);
+$('#reveal-button').addEventListener('click', revealStack);
 $('#resolve-button').addEventListener('click', resolveScene);
-updateLockState();
