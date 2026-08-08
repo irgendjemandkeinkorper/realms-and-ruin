@@ -92,19 +92,25 @@ def run() -> None:
                 raise
             assert page.locator("#scr-title.active").count() == 1
 
-            # Tabletop reimagining prototype: reachable from the title page,
-            # playable as a focused scene, and safe at a narrow viewport.
+            # Tabletop reimagining prototype: preserves the base game's
+            # private interpretation, Signal reveal, and shared canon loop.
             page.get_by_role(
                 "link", name="Try the Tabletop Prototype", exact=True
             ).click()
             page.wait_for_url("**/tabletop-prototype.html")
             assert page.get_by_role("heading", name="The Bell Beneath the Mire").count() == 1
-            assert page.get_by_text("The party reaches a half-sunken chapel", exact=False).count() == 1
-            page.get_by_role("button", name="Lore", exact=True).click()
-            page.get_by_role("button", name="Roll the d20", exact=True).click()
-            assert page.locator("#roll-result").inner_text().startswith("d20:")
+            assert page.get_by_text("private interpretation", exact=False).count() >= 1
+            for player in range(3):
+                page.get_by_role("button", name="Protect the forgotten names", exact=True).click()
+                page.fill("#private-note", f"Smoke interpretation {player + 1}")
+                page.get_by_role("button", name="Lock interpretation", exact=True).click()
+                if player < 2:
+                    page.get_by_role("button", name="Pass to the next storyteller", exact=True).click()
+            page.get_by_role("button", name="Reveal the Signal", exact=True).click()
+            page.get_by_role("button", name="Make this canon", exact=True).first.click()
+            page.get_by_role("button", name="Resolve the scene", exact=True).click()
+            assert "Smoke interpretation" in page.locator("#scene-log").inner_text()
             assert page.locator("#scene-log").inner_text().count("The Bell Beneath the Mire") == 1
-            assert page.locator("#threat-track").get_attribute("aria-valuenow") is not None
             assert_no_mobile_overflow(page)
             page.goto(base, wait_until="domcontentloaded")
 
