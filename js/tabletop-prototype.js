@@ -9,6 +9,20 @@ const state = {
 const $ = (selector) => document.querySelector(selector);
 const all = (selector) => [...document.querySelectorAll(selector)];
 const names = ['Storyteller One', 'Storyteller Two', 'Storyteller Three'];
+let artStyle = 'painterly';
+
+function updateArtStyle(style) {
+  artStyle = style;
+  all('[data-art-style]').forEach((button) => {
+    const selected = button.dataset.artStyle === style;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+  });
+  all('[data-art-key]').forEach((image) => {
+    image.src = `art/images/${artStyle}/${image.dataset.artKey}.png`;
+  });
+  document.body.dataset.artStyle = style;
+}
 
 function setPhase(current) {
   const phases = ['hook', 'heroes', 'scene', 'resolve'];
@@ -54,7 +68,7 @@ function chooseScene(button) {
 function showActiveStoryteller() {
   $('#storyteller-label').textContent = `${names[state.activePlayer]} · ${state.activePlayer + 1} of 3`;
   $('#contribution-instruction').textContent = state.activePlayer === 0
-    ? 'Choose one Scene or Omen card privately. Add the meaning you want the table to notice.'
+    ? 'Choose one Scene or Portent card privately. Add the meaning you want the table to notice.'
     : 'Pass the screen to the next storyteller. Keep the previous card choices and readings hidden.';
   $('#private-note').value = '';
   state.contribution = '';
@@ -92,9 +106,9 @@ function lockContribution() {
 
 function renderStack() {
   const row = $('#stack-row');
-  row.innerHTML = `<div class="game-card stack-card"><span class="card-type">HOOK</span><strong>The Drowned Bell</strong></div><div class="game-card stack-card"><span class="card-type">SCENE</span><strong>${state.scene}</strong></div>`;
+  row.innerHTML = `<div class="game-card stack-card"><span class="card-type">QUEST</span><strong>The Drowned Bell</strong></div><div class="game-card stack-card"><span class="card-type">SCENE</span><strong>${state.scene}</strong></div>`;
   state.interpretations.forEach((entry) => {
-    row.insertAdjacentHTML('beforeend', `<div class="game-card stack-card"><span class="card-type">${entry.card.includes('Omen') || entry.card.includes('Debt') ? 'OMEN' : 'SCENE'}</span><strong>${entry.card}</strong></div>`);
+    row.insertAdjacentHTML('beforeend', `<div class="game-card stack-card"><span class="card-type">${entry.card.includes('Debt') ? 'PORTENT' : 'SCENE'}</span><strong>${entry.card}</strong></div>`);
   });
 }
 
@@ -140,3 +154,4 @@ $('#private-note').addEventListener('input', updateLockState);
 $('#lock-button').addEventListener('click', lockContribution);
 $('#reveal-button').addEventListener('click', revealStack);
 $('#resolve-button').addEventListener('click', resolveScene);
+all('[data-art-style]').forEach((button) => button.addEventListener('click', () => updateArtStyle(button.dataset.artStyle)));

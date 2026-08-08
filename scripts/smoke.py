@@ -100,7 +100,7 @@ def run() -> None:
             page.wait_for_url("**/tabletop-prototype.html")
             assert page.get_by_role("heading", name="The Drowned Bell").count() == 1
             assert page.get_by_text("Scene deck", exact=False).count() >= 1
-            page.get_by_role("button", name="Choose this Hook", exact=True).click()
+            page.get_by_role("button", name="Choose this Quest", exact=True).click()
             page.get_by_role("button", name="Play this Scene", exact=True).click()
             for player in range(3):
                 page.get_by_role("button", name="The Bell's Debt", exact=True).click()

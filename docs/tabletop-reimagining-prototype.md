@@ -2,35 +2,35 @@
 
 ## Design boundary
 
-This is a narrative storytelling game with a dark-fantasy aesthetic. It is not D&D. The setting may use dungeons, bells, ruined chapels, Heroes, Omens, and Acts, but the mechanics remain the same family as Bleakwood Vale and Supe Pines:
+This is a narrative storytelling game with a dark-fantasy aesthetic. It is not D&D. The setting may use dungeons, bells, ruined chapels, Heroes, Portents, and Acts, but the mechanics remain the same family as Bleakwood Vale and Supe Pines:
 
-- Hook/Case cards establish the situation.
+- Quest/Case cards establish the situation. Quest is the new-facing name for the base game's Hook role.
 - Hero cards and setup questions make the cast specific.
 - Scene cards create the current moment.
-- Players contribute Scene or Omen cards.
+- Players contribute Scene or Portent cards. Portents can promise help, harm, or an uncertain mixture of both.
 - Resolution turns the card combination into shared fiction.
 - Tone, Secrets, Acts, and the Dossier carry consequences forward.
 
 ## The twist
 
-Each storyteller privately decides what their contributed card means. After all contributions are locked, an Omen is revealed to reframe the scene. The table then chooses one interpretation to become canon.
+Each storyteller privately decides what their contributed card means. After all contributions are locked, a Portent is revealed to reframe the scene. The table then chooses one interpretation to become canon.
 
 The twist lives inside the existing card pipeline; it does not replace card selection, contribution limits, or resolution.
 
 ## Prototype loop
 
-1. **Choose the Hook.** Select the Hook card that frames the problem.
+1. **Choose the Quest.** Select the Quest card that frames the problem.
 2. **Deal the Scene.** Show a small Scene deck and choose the current Scene card.
-3. **Open the contribution row.** Each storyteller privately chooses one Scene contribution or Omen contribution.
+3. **Open the contribution row.** Each storyteller privately chooses one Scene contribution or Portent contribution.
 4. **Write the reading.** Each storyteller adds one sentence explaining what their card means here.
 5. **Lock and pass.** Keep the card and sentence hidden until everyone has contributed.
-6. **Reveal the card stack.** Show Hook, Scene, all contributions, and the Signal Omen.
+6. **Reveal the card stack.** Show Quest, Scene, all contributions, and the Signal Portent.
 7. **Make canon.** Choose one contribution reading as the fact the next Scene must respect.
 8. **Resolve and record.** Add the result to the Dossier, update tone, and continue the Act.
 
 ## Prototype content
 
-### Hook
+### Quest
 
 **The Drowned Bell**
 
@@ -47,9 +47,9 @@ Question: *What is the bell asking the village to forget?*
 ### Contribution row
 
 - **The Chapel Gives Way** — Scene contribution. Something trapped below has room to breathe.
-- **The Bell's Debt** — Omen contribution. A name is a promise, and promises can be collected.
+- **The Bell's Debt** — Portent contribution. A name is a promise, and promises can be collected.
 
-### Signal Omen
+### Signal Portent
 
 **The Bell Rings Your Name**
 
@@ -64,7 +64,7 @@ The selected interpretation becomes a binding fact. Unselected interpretations r
 - rumors;
 - false beliefs;
 - future Secrets;
-- later Omens; or
+- later Portents; or
 - the hidden truth behind an Act close.
 
 This prevents contributions from feeling wasted while still making the canon choice matter.
@@ -81,8 +81,8 @@ The next Scene must build from the first blank. The second blank becomes pressur
 
 The prototype works if:
 
-1. Players use the same Hook and Scene card but produce different readings.
-2. The Omen makes all readings newly interesting.
+1. Players use the same Quest and Scene card but produce different readings.
+2. The Portent makes all readings newly interesting, whether its effect feels fortunate, ominous, or unresolved.
 3. The card stack is easy to understand at a glance.
 4. The canon choice changes the fiction rather than merely scoring it.
 5. Unchosen readings remain useful material.

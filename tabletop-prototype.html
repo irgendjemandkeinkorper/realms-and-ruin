@@ -13,23 +13,25 @@
   <header class="prototype-hero">
     <p class="sc eyebrow">A cardplay mechanics prototype</p>
     <h1>The Drowned Bell</h1>
-    <p class="prototype-lede">Choose a Hook, deal a Scene, contribute Scene or Omen cards, and decide together which private reading becomes part of the story.</p>
+    <p class="prototype-lede">Choose a Quest, deal a Scene, contribute Scene or Portent cards, and decide together which private reading becomes part of the story.</p>
+    <div class="style-toggle" role="group" aria-label="Card art style"><span class="small muted">Card art</span><button class="style-button selected" data-art-style="painterly" aria-pressed="true">Painterly</button><button class="style-button" data-art-style="tarot" aria-pressed="false">Tarot</button></div>
     <div class="ornament">❦ ✦ ❦</div>
     <nav class="phase-rail" aria-label="Story phases">
-      <span class="phase active" id="phase-hook">01 Hook</span><span class="phase" id="phase-heroes">02 Heroes</span><span class="phase" id="phase-scene">03 Scene</span><span class="phase" id="phase-resolve">04 Resolve</span>
+      <span class="phase active" id="phase-hook">01 Quest</span><span class="phase" id="phase-heroes">02 Heroes</span><span class="phase" id="phase-scene">03 Scene</span><span class="phase" id="phase-resolve">04 Resolve</span>
     </nav>
   </header>
 
   <section class="prototype-grid" aria-label="Cardplay prototype">
     <article class="table-board panel">
-      <div class="board-heading"><div><span class="sc">The Table</span><h2 id="board-title">Choose the Hook</h2></div><span class="act-badge">ACT I · THE DESCENT</span></div>
+      <div class="board-heading"><div><span class="sc">The Table</span><h2 id="board-title">Choose the Quest</h2></div><span class="act-badge">ACT I · THE DESCENT</span></div>
 
       <section id="hook-stage" class="stage">
         <article class="game-card hook-card">
-          <div class="card-type">HOOK · THE INCIDENT</div><h3>The Drowned Bell</h3>
+          <div class="card-type">QUEST · THE CALLING</div><h3>The Drowned Bell</h3>
+          <div class="card-art quest-art"><img src="art/images/painterly/quests/the-drowned-bell.png" data-art-key="quests/the-drowned-bell" alt="A drowned gothic chapel and bell beneath the mire"></div>
           <p>Every evening, the bell beneath the Mire rings once. Each ring steals a villager's memory of someone they love. Tonight, it rings for the first time beneath the old chapel.</p>
           <div class="card-question"><span class="sc">The question</span><strong>What is the bell asking the village to forget?</strong></div>
-          <button class="primary" id="hook-button">Choose this Hook</button>
+          <button class="primary" id="hook-button">Choose this Quest</button>
         </article>
       </section>
 
@@ -43,10 +45,10 @@
         <div id="active-scene" class="active-scene hidden"></div>
         <div id="contribution-stage" class="hidden">
           <div class="table-section-heading"><h3>Contribution row</h3><span id="storyteller-label" class="small muted">Storyteller One · 1 of 3</span></div>
-          <p id="contribution-instruction" class="instruction">Choose one Scene or Omen card privately. Add the meaning you want the table to notice.</p>
+          <p id="contribution-instruction" class="instruction">Choose one Scene or Portent card privately. Add the meaning you want the table to notice.</p>
           <div class="card-row contribution-row">
             <button class="game-card selectable-card contribution-card" data-card="The Chapel Gives Way"><span class="card-type">SCENE CONTRIBUTION</span><strong>The Chapel Gives Way</strong><small>Something trapped below has room to breathe.</small></button>
-            <button class="game-card selectable-card contribution-card" data-card="The Bell's Debt"><span class="card-type omen-type">OMEN CONTRIBUTION</span><strong>The Bell's Debt</strong><small>A name is a promise, and promises can be collected.</small></button>
+            <button class="game-card selectable-card contribution-card" data-card="The Bell's Debt"><span class="card-type portent-type">PORTENT CONTRIBUTION</span><div class="card-art portent-art"><img src="art/images/painterly/portents/the-bells-debt.png" data-art-key="portents/the-bells-debt" alt="A suspended bell over a dark bowl of water"></div><strong>The Bell's Debt</strong><small>A name is a promise, and promises can be collected.</small></button>
           </div>
           <label for="private-note" class="note-label">Private reading</label><textarea id="private-note" rows="2" maxlength="180" placeholder="I want the table to notice..."></textarea>
           <button class="primary action-button" id="lock-button" disabled>Lock interpretation</button>
@@ -56,9 +58,9 @@
       </section>
 
       <section id="resolve-stage" class="stage hidden">
-        <div class="table-section-heading"><h3>Resolve the stack</h3><span class="small muted">Hook + Scene + contributions + Omen</span></div>
+        <div class="table-section-heading"><h3>Resolve the stack</h3><span class="small muted">Quest + Scene + contributions + Portent</span></div>
         <div class="stack-row" id="stack-row"></div>
-        <article class="game-card omen-card"><span class="card-type omen-type">OMEN · THE SIGNAL</span><strong>The Bell Rings Your Name</strong><small>Every storyteller hears their own name spoken from beneath the water.</small></article>
+        <article class="game-card omen-card"><span class="card-type portent-type">PORTENT · THE SIGN</span><div class="card-art portent-art"><img src="art/images/painterly/portents/the-bells-debt.png" data-art-key="portents/the-bells-debt" alt="A suspended bell over a dark bowl of water"></div><strong>The Bell Rings Your Name</strong><small>Every storyteller hears their own name spoken from beneath the water.</small></article>
         <p class="instruction">The Signal changes the meaning of every card. Choose which reading becomes the next fact.</p>
         <div id="canon-list" class="canon-list"></div>
         <button class="primary action-button" id="resolve-button" disabled>Resolve the scene</button>
@@ -66,7 +68,7 @@
 
       <section id="complete-stage" class="stage hidden">
         <div class="complete-mark">✦</div><h2>The canon is set</h2>
-        <p id="canon-summary"></p><p class="muted">The next Scene must build from this truth. The other readings remain available as rumors, Secrets, or future Omens.</p>
+        <p id="canon-summary"></p><p class="muted">The next Scene must build from this truth. The other readings remain available as rumors, Secrets, or future Portents.</p>
         <a class="prototype-link" href="tabletop-prototype.html">Deal another scene</a>
       </section>
     </article>
@@ -79,11 +81,11 @@
       </section>
       <section class="panel dossier-panel">
         <div class="panel-heading"><h2>The Dossier</h2><span class="small muted">What became true</span></div>
-        <p id="scene-log" class="dossier-entry">The Hook is waiting for a Scene and its first interpretation.</p>
+        <p id="scene-log" class="dossier-entry">The Quest is waiting for a Scene and its first interpretation.</p>
       </section>
       <section class="panel twist-panel">
         <div class="panel-heading"><h2>The twist</h2><span class="tone-badge">PRIVATE → SHARED</span></div>
-        <ol><li>Choose a card from the current row.</li><li>Write what it means to you.</li><li>Reveal everything after the Omen.</li><li>Make one reading canon.</li></ol>
+        <ol><li>Choose a card from the current row.</li><li>Write what it means to you.</li><li>Reveal everything after the Portent.</li><li>Make one reading canon.</li></ol>
       </section>
     </aside>
   </section>
