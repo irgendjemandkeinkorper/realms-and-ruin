@@ -63,6 +63,20 @@ export const CARD_VICTIMS = [
     face('die-nacht','Remembering','The fragment reflects each survivor with a different face, all of them looking homeward.','The dark does not want the relic. It wants a witness.'))
 ];
 
+const VICTIM_BY_HOOK = {
+  'black-gate':'star-metal-seal',
+  'lost-cartographers':'living-silver-map',
+  'broken-ward':'black-crystal-keystone',
+  'rival-expedition':'brass-command-crown',
+  'clockwork-heart':'clockwork-heart',
+  'below-the-below':'nameless-fragment'
+};
+
+export function victimCardForHook(hook){
+  const slug = VICTIM_BY_HOOK[hook?.id];
+  return CARD_VICTIMS.find(item=>item.slug===slug) || null;
+}
+
 function roleKey(value){
   return String(value||'').toLowerCase().normalize('NFKD').replace(/[’']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }

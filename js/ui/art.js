@@ -1,6 +1,6 @@
 import { esc, slugify } from '../engine/utils.js';
 import { State } from '../engine/state.js';
-import { archetypeCardForRole, pairedCardStem } from '../data/cardFaces.js';
+import { archetypeCardForRole, pairedCardStem, victimCardForHook } from '../data/cardFaces.js';
 
 export const ART_STYLES = [
   {id:'painterly', label:'Dungeon Oil', note:'Warm torchlight, deep violet stone, hand-painted texture, and gilded relic detail.'},
@@ -89,8 +89,8 @@ for (const slug of ['oathbound-shield','rift-scholar','delver-rogue','ashen-acol
   READY_ART.add(`painterly/archetypes/${slug}-guttered-v1.png`);
 }
 for (const slug of ['star-metal-seal','living-silver-map','black-crystal-keystone','brass-command-crown','clockwork-heart','nameless-fragment']) {
-  READY_ART.add(`tarot/victims/${slug}-mourning-v1.png`);
-  READY_ART.add(`tarot/victims/${slug}-die-nacht-v1.png`);
+  READY_ART.add(`tarot/victims/${slug}-mourning-vault-woodcut-v1.png`);
+  READY_ART.add(`tarot/victims/${slug}-die-nacht-vault-woodcut-v1.png`);
 }
 
 export function artAssetAvailable(style, category, key){
@@ -158,7 +158,13 @@ export function hookArtHTML(hook, opts={}){
 }
 
 export function victimArtHTML(hook, opts={}){
-  return gameArtHTML('victims',hook.id,`The relic from ${hook.title}`,opts);
+  const style = normalizeArtStyle(opts.style ?? currentArtStyle());
+  const item = victimCardForHook(hook);
+  if(item){
+    const face = item.faces[0];
+    return gameArtHTML('victims',`${pairedCardStem(style,item,0)}.png`,`${item.title}, ${face.label}`,{...opts,style});
+  }
+  return gameArtHTML('victims',hook.id,`The relic from ${hook.title}`,{...opts,style});
 }
 
 /* Used during both local and online creation. The currently selected
