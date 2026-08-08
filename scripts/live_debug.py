@@ -30,7 +30,7 @@ with sync_playwright() as playwright:
     page.keyboard.press("Escape")
     page.get_by_role("button", name="How to Play", exact=True).click()
     page.keyboard.press("Escape")
-    page.get_by_role("button", name="Begin the Tale (this screen)", exact=True).click()
+    page.get_by_role("button", name="Enter the Under-Vaults", exact=True).click()
     print(f"hook_screen={page.locator('#scr-hook.active').count()}")
     page.evaluate("window.showGallery()")
     print(f"gallery_tiles={page.locator('.gcat-archetypes .gtile').count()}")
