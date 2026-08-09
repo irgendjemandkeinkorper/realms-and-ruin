@@ -223,6 +223,8 @@ label.fld{display:block;margin:12px 0 4px;color:var(--gold);font-family:'IM Fell
 .card.selectable{cursor:pointer;transition:transform .15s ease, box-shadow .15s ease}
 .card.selectable:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.7)}
 .card.selectable:focus-visible,.arch-flip.selectable:focus-visible,.gtile:focus-visible{outline:2px solid var(--moon);outline-offset:3px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,
+[role="button"]:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--moon);outline-offset:3px}
 .card.selected{outline:2px solid var(--blood-bright);outline-offset:-5px;box-shadow:0 0 0 2px var(--blood-bright), 0 6px 18px rgba(0,0,0,.6)}
 .card.omen{background:linear-gradient(160deg,#241c26,#171019);color:#d9cfe0;border-color:#5c4a63;outline-color:#5c4a63}
 .card.omen .c-title{color:#e6d8ef}
@@ -854,3 +856,25 @@ button:hover{box-shadow:0 0 22px rgba(191,132,52,.3);transform:translateY(-1px)}
 .gtile-media,.gdetail-media{border-radius:9px;border-color:rgba(213,165,82,.7);background:linear-gradient(145deg,#eadfc4,#b8935a)}
 .gtile-cap{color:#e4d4ae}
 .tone{border-radius:999px;font-size:.68rem}
+
+/* ---------- art-style-reactive chrome ----------
+   Border/shadow-only accents that echo whichever card-art style is active
+   (set via applyArtStyleTheme() -> documentElement.dataset.artStyle), so the
+   shared UI chrome faintly matches the chosen visual language without
+   touching layout or content color. Default (unset/painterly, "Dungeon Oil")
+   keeps the palette above unchanged; "tarot" (Vault Woodcut) swaps in a
+   high-contrast ink-engraving accent with restrained ember-red glow. */
+:root[data-art-style="tarot"] .panel,
+:root[data-art-style="tarot"] .card,
+:root[data-art-style="tarot"] .hookcard,
+:root[data-art-style="tarot"] .arch,
+:root[data-art-style="tarot"] .gtile-media,
+:root[data-art-style="tarot"] .gdetail-media,
+:root[data-art-style="tarot"] .disclose{
+  border-color:rgba(192,74,77,.55);
+  box-shadow:0 0 0 1px rgba(192,74,77,.14), 0 6px 18px rgba(0,0,0,.6);
+}
+:root[data-art-style="tarot"] #topbar{
+  border-bottom-color:rgba(192,74,77,.5);
+  box-shadow:0 2px 12px rgba(192,74,77,.1);
+}

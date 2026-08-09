@@ -101,6 +101,10 @@ export function normalizeArtStyle(style){
   return ART_STYLES.some(s=>s.id===style) ? style : 'painterly';
 }
 
+export function applyArtStyleTheme(style){
+  if(document.documentElement) document.documentElement.dataset.artStyle = normalizeArtStyle(style);
+}
+
 export function currentArtStyle(G=State.G){
   return normalizeArtStyle(G?.artStyle);
 }

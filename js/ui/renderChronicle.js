@@ -153,11 +153,13 @@ export function returnToGame(){
 export function initOverlayDismiss(){
   // Deliberately no click-outside-to-close: the Gallery's grid doesn't fill
   // the overlay width, so a stray click in the margin beside a card used to
-  // close the whole thing — jarring. Escape and the explicit close buttons
-  // remain the ways out.
+  // close the whole thing — jarring. Escape, Backspace, and the explicit
+  // close buttons remain the ways out.
   document.addEventListener('keydown', e=>{
-    if(e.key!=='Escape') return;
-    if($('overlay').style.display==='block'){ closeOverlay(); return; }
+    if(e.key!=='Escape' && e.key!=='Backspace') return;
+    const target = e.target;
+    if(e.key==='Backspace' && (target?.tagName==='INPUT' || target?.tagName==='TEXTAREA' || target?.isContentEditable)) return;
+    if($('overlay').style.display==='block'){ e.preventDefault(); closeOverlay(); return; }
     // No other screen currently has a "close" concept — the overlay is
     // the only modal-like surface in the app today.
   });
